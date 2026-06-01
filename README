@@ -1,0 +1,32 @@
+# GoodMorning
+
+GoodMorning is a modular Bash launcher for small daily utilities.
+
+The project is built around a simple structure: a single entry point, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
+
+## Quick Start
+
+Run the application:
+bash main.sh
+or 
+chmod +x main.sh 
+./main.sh
+
+## How It Works
+
+* `main.sh` is the application entry point.
+* `config.sh` contains the module registry, shortcut definitions and other settings.
+* `libs/bootstrap.sh` and `libs/tools.sh` provide shared loading and utility functions.
+* `modules/` contains the individual feature modules.
+
+## Adding a Module
+
+1. Create a new script inside `modules/`.
+2. Register the module in `config.sh`.
+3. Run the application.
+
+The new module will automatically become available through the launcher.
+
+## Notes
+
+GoodMorning is an active learning project and is intentionally kept simple. The focus is on modular Bash development, reusable libraries, and gradually improving code quality while adding new features.
