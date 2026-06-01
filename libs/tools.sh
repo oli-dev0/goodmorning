@@ -112,7 +112,7 @@ parse_module() {
 }
 
 validate_shortcuts()
-	{
+{
 	declare -A seen_shortcuts
 	local shortcut
 
@@ -126,7 +126,21 @@ validate_shortcuts()
 			seen_shortcuts[$shortcut]="$module_name"
 		done
 	done
-	}
+}
+
+validate_modules()
+{
+	local entry
+
+	for entry in "${MODULES[@]}"; do
+		parse_module "$entry"
+
+		if [[ ! -f "$MODULES_DIR/$module_name.sh" ]]; then
+			log_error "configured module '$module_name' does not exist at $MODULES_DIR/$module_name.sh"
+			return 1
+		fi
+	done
+}
 
 run_module()
 {
