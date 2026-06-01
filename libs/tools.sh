@@ -111,6 +111,23 @@ parse_module() {
 	module_shortcuts=("${fields[@]:1:${#fields[@]}-2}")		# everything in between
 }
 
+validate_shortcuts()
+	{
+	declare -A seen_shortcuts
+	local shortcut
+
+	for entry in "${MODULES[@]}"; do parse_module "$entry"
+
+		for shortcut in "${module_shortcuts[@]}"; do
+			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
+				log_error "duplicate shortcut '$shortcut' used by '$module_name' and '${seen_shortcuts[$shortcut]}'"
+				return 1
+			fi
+			seen_shortcuts[$shortcut]="$module_name"
+		done
+	done
+	}
+
 run_module()
 {
 	local module="$1"
@@ -148,7 +165,7 @@ log_warning()
 log_error()
 {
 	local msg=${1:-unknown error}
-	printf '%s\n\n' "${ERROR} ❌ Error:${RESET}${ERRORTEXT} ${msg} ${RESET}"
+	printf '\n%s\n' "${ERROR} ❌ Error:${RESET}${ERRORTEXT} ${msg} ${RESET}"
 }
 
 trap_error()			# standard message for trap errors

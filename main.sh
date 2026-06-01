@@ -5,6 +5,7 @@
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
 	load_libs styles animations			# add lib name here
 	set_title "   ☀️  Good Morning   "
+	validate_shortcuts					# checking for duplicate modules shortcuts in config.sh
 
 # SET MAIN QUESTIONS
 	list_questions()		# checks the modules array in config.sh > sends it to parser to get script, shortcuts, question > go over all of them 
