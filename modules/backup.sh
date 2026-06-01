@@ -45,7 +45,7 @@
 				;;
 			*)
 				clearscreen
-				echo -e " $msg_invalid_input \n"
+				printf ' %s\n\n' "$msg_invalid_input"
 				;;
 		esac
 	done
@@ -75,15 +75,15 @@
 	clearscreen
 	log_success "backup - success"
 	clearscreen
-	echo -e "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
-	echo -e "${GREEN}${BOLD}   ✅ Backup completed${RESET}"
-	echo -e "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
+	printf '%s\n' "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
+	printf '%s\n' "${GREEN}${BOLD}   ✅ Backup completed${RESET}"
+	printf '%s\n' "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
 
-	# echo -e "${BOLD}${BLUE}   📦 Folder:${RESET} $(basename "$BACKUP_DIR")"
-	echo -e "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
-	echo -ne "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count - ${file_hidden} hidden "
+	# printf '%s\n' "${BOLD}${BLUE}   📦 Folder:${RESET} $(basename "$BACKUP_DIR")"
+	printf '%s\n' "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
+	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count - ${file_hidden} hidden "
 	# [[ "$file_hidden" -eq 1 ]] && printf "file" || printf "files"
-	echo -e "\n${BOLD}${BLUE}   💾 Size:${RESET}	$file_size\n"
+	printf '\n%s\t%s\n\n' "${BOLD}${BLUE}   💾 Size:${RESET}" "$file_size"
 	
 	hide_keyboard
 	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline

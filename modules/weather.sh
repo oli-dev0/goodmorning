@@ -82,7 +82,7 @@ weather_getinfo()
 
 # CHECK JSON STRUCTURE
 	log_start "weather - starting json check"; clearscreen
-	weather_jsoncheck "$weatherJson" || { move_line_up; echo -e " ${ERROR}Weather fetch failed\n${RESET}"; return 1; }
+	weather_jsoncheck "$weatherJson" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
 # DECLARE WEATHER VARIABLES FROM JSON
 	unset weather					# reset weather variable
@@ -110,37 +110,37 @@ weather_warnings()
 
 # RAIN
 	(is_positive "${weather[rain]}" || [[ "$desc" == *rain* ]]) &&
-	echo -e "\n 🌧️  ${RAIN}WARNING - RAIN EXPECTED - ${weather[rain]}mm${RESET} 🌧️"
+	printf '\n 🌧️  %sWARNING - RAIN EXPECTED - %smm%s 🌧️\n' "${RAIN}" "${weather[rain]}" "${RESET}"
 
 # SNOW
 	(is_positive "${weather[snow]}" || [[ "$desc" == *snow* ]]) &&
-	echo -e "\n 🌨️  ${SNOW}WARNING - SNOW EXPECTED - ${weather[snow]}cm${RESET} 🌨️"
+	printf '\n 🌨️  %sWARNING - SNOW EXPECTED - %scm%s 🌨️\n' "${SNOW}" "${weather[snow]}" "${RESET}"
 
 # STORM
 	[[ "$desc" == *storm* ]] && 
-	echo -e "\n ⛈️  ${STORM}WARNING - STORM EXPECTED${RESET} ⛈️"
+	printf '\n ⛈️  %sWARNING - STORM EXPECTED%s ⛈️\n' "${STORM}" "${RESET}"
 
 # THUNDER
 	[[ "$desc" == *thunder* ]] && 
-	echo -e "\n ⚡ ${THUNDER}WARNING - THUNDER EXPECTED${RESET} ⚡"
+	printf '\n ⚡ %sWARNING - THUNDER EXPECTED%s ⚡\n' "${THUNDER}" "${RESET}"
 
 # HAIL
 	[[ "$desc" == *hail* ]] && 
-	echo -e "\n 🌨  ${SNOW}WARNING - HAIL EXPECTED${RESET} 🌨"
+	printf '\n 🌨  %sWARNING - HAIL EXPECTED%s 🌨\n' "${SNOW}" "${RESET}"
 }
 
 weather_showinfo()
 {
 	clearscreen
-	echo -e " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}${RESET}"
-	echo -e " ${BOLD}- - - - - - - - - - - - - - - - ${RESET}"
-	echo -e " 🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C (feels ${weather[feels]}°C)"
-	echo -e " 📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
-	echo -e " 💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
-	echo -e " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
+	printf '%s\n' " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}${RESET}"
+	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - ${RESET}"
+	printf '%s\n' " 🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C (feels ${weather[feels]}°C)"
+	printf '%s\n' " 📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
+	printf '%s\n' " 💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
+	printf '%s\n' " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
 	weather_warnings
-	echo -e " ${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
-	echo -e " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}\n"
+	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
+	printf '%s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
 }
 
 get_weather()
@@ -176,7 +176,7 @@ get_weather_ask()
 					;;
 				*)
 					clearscreen
-					echo -e " $msg_invalid_input \n"
+					printf ' %s\n\n' "$msg_invalid_input"
 					;;
 			esac
 		done

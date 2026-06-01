@@ -130,25 +130,25 @@ run_module()
 log_start()
 {
 	local msg=${1:-Starting...}
-	echo -e "${BOLD} 🟢 "$msg" ${RESET}\n"
+	printf '%s\n\n' "${BOLD} 🟢 ${msg} ${RESET}"
 }
 
 log_success()
 {
 	local msg=${1:-Success!}
-	echo -e "${SUCCESS} ✅ "$msg" ${RESET}\n"
+	printf '%s\n\n' "${SUCCESS} ✅ ${msg} ${RESET}"
 }
 
 log_warning()
 {
 	local msg=${1:-unknown}	
-	echo -e "${WARNING} ⚠️ Warning: "$msg" ${RESET}\n"
+	printf '%s\n\n' "${WARNING} ⚠️ Warning: ${msg} ${RESET}"
 }
 
 log_error()
 {
 	local msg=${1:-unknown error}
-	echo -e "${ERROR} ❌ Error:${RESET}${ERRORTEXT} "$msg" ${RESET}\n"
+	printf '%s\n\n' "${ERROR} ❌ Error:${RESET}${ERRORTEXT} ${msg} ${RESET}"
 }
 
 trap_error()			# standard message for trap errors
@@ -156,15 +156,18 @@ trap_error()			# standard message for trap errors
 	local line="$1"
 	local cmd="$2"
 
-	log_error "Trap error \n Script failed at line: $line and ${LINENO} \n From commands: $cmd AND/OR "$BASH_COMMAND" \n Script path: "${BASH_SOURCE[0]##*/}" > ${BASH_SOURCE[1]##*/}"
+	log_error "Trap error
+ Script failed at line: $line and ${LINENO}
+ From commands: $cmd AND/OR $BASH_COMMAND
+ Script path: ${BASH_SOURCE[0]##*/} > ${BASH_SOURCE[1]##*/}"
 	move_line_up; move_line_up; move_line_up; move_line_up;			# I am doing this because I want to log the error, but not show it in that format
-	echo -ne "${ERROR}"
-	echo -e "    ❌ Script failed at line: $line and ${LINENO}"
-	echo -e "    ❌ From commands: "
-	echo -e "         ➡️  $cmd"
-	echo -e "         ➡️  "$BASH_COMMAND""
-	echo -e "    📁 Script path: "${BASH_SOURCE[0]##*/}" > ${BASH_SOURCE[1]##*/}"
-	echo -e "${RESET}"
+	printf '%s' "${ERROR}"
+	printf '    ❌ Script failed at line: %s and %s\n' "$line" "${LINENO}"
+	printf '    ❌ From commands: \n'
+	printf '         ➡️  %s\n' "$cmd"
+	printf '         ➡️  %s\n' "$BASH_COMMAND"
+	printf '    📁 Script path: %s > %s\n' "${BASH_SOURCE[0]##*/}" "${BASH_SOURCE[1]##*/}"
+	printf '%s\n' "${RESET}"
 	exit 1
 }
 
