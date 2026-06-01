@@ -1,23 +1,23 @@
 # test files
-	0_test.sh
-	libs/wttr.json
+0_test.sh
+libs/wttr.json
 
 # Editors
-	.vscode/
-	.idea/
-	*.sublime-*
+.vscode/
+.idea/
+*.sublime-*
 
 # Vim
-	*.swp
-	*.swo
+*.swp
+*.swo
 
 # Temporary files
-	*.tmp
-	*.temp
+*.tmp
+*.temp
 
 # Logs
-	*.log	
+*.log	
 
 # OS files
-	.DS_Store
-	Thumbs.db
+.DS_Store
+Thumbs.db
