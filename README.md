@@ -4,8 +4,6 @@
 
 The project is built around a simple structure: a single entry point, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
 
----
-
 ## 🚀 Quick Start
 
 Run the application:
@@ -20,8 +18,6 @@ or
 chmod +x main.sh
 ./main.sh
 ```
-
----
 
 ## 🏗️ How It Works
 
@@ -45,8 +41,6 @@ Provides reusable helper and utility functions used throughout the project.
 
 Contains the individual feature modules.
 
----
-
 ## ➕ Adding a Module
 
 1. Create a new script inside `modules/`
@@ -58,8 +52,6 @@ bash main.sh
 ```
 
 The new module will automatically become available through the launcher.
-
----
 
 ## 🎯 Project Goals
 
