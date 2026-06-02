@@ -34,9 +34,9 @@
 # WEATHER
 	# nothing to configure for weather module
 
-# BACKUP
-	DIR_TO_BACKUP="$HOME/Coding"			# what to backup
-	BACKUP_DIR="$HOME/Coding/backups"		# where to backup (script will skip the backup folder if it's inside the folder to backup)
+# BACKUP - THESE FOLDERS MAY NOT BE THE SAME
+	GM_BACKUP_SOURCE="$HOME/Coding"				# what to backup
+	GM_BACKUP_DEST="$HOME/Coding/backups"		# where to backup (this folder is excluded from being backed up)
 
 # CRYPTO
 	# API TO CALL

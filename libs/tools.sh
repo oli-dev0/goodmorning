@@ -110,7 +110,7 @@ parse_module() {
 
 	GM_PARSED_module_name="${fields[0]}"														# weather (first)
 	GM_PARSED_module_question="${fields[-1]}"												# 🌤️  Weather (last)
-	module_shortcuts=("${fields[@]:1:${#fields[@]}-2}")		# everything in between
+	GM_PARSED_module_shortcuts=("${fields[@]:1:${#fields[@]}-2}")		# everything in between
 }
 
 validate_shortcuts()
@@ -120,7 +120,7 @@ validate_shortcuts()
 
 	for entry in "${GM_MODULES[@]}"; do parse_module "$entry"
 
-		for shortcut in "${module_shortcuts[@]}"; do
+		for shortcut in "${GM_PARSED_module_shortcuts[@]}"; do
 			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
 				echo
 				log_error "duplicate shortcut '$shortcut' used by '$GM_PARSED_module_name' and '${seen_shortcuts[$shortcut]}'"
@@ -139,7 +139,6 @@ validate_modules()
 		parse_module "$entry"
 
 		if [[ ! -f "$GM_MODULES_DIR/$GM_PARSED_module_name.sh" ]]; then
-			echo
 			log_error "configured module '$GM_PARSED_module_name' does not exist at $GM_MODULES_DIR/$GM_PARSED_module_name.sh"
 			return 1
 		fi
@@ -153,7 +152,7 @@ run_module()
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
 	local exit_code
 
-	[[ ! -f "$module_path" ]] && { echo -ne "\n"; log_error "module '$module' not found at $module_path" >&2; return 1; }
+	[[ ! -f "$module_path" ]] && { log_error "module '$module' not found at $module_path" >&2; return 1; }
 
 	bash "$module_path"
 	exit_code=$?											# get exit code of previous command 'bash'
