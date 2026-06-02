@@ -22,7 +22,9 @@ chmod +x main.sh
 You can also run individual modules directly:
 
 ```bash
-bash modules/weather.sh "New York" "Eiffel Tower"
+bash modules/weather.sh "New York" 
+# or a landmark
+bash modules/weather.sh "Eiffel Tower"
 bash modules/backup.sh
 ```
 
