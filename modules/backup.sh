@@ -80,7 +80,6 @@
 	log_start "Backup started..."; sleep 0.3
 	clearscreen
 	anim_status_bar "Backup in progress...  "; sleep 0.5
-	# printf " "
 
 # MAKE BACKUP
 	tar "${tar_excludes[@]}" --transform='s|^\./||' -czf "$tar_file" -C "$backup_source" .
@@ -98,9 +97,9 @@
 	printf '%s\n' "${GREEN}${BOLD}   ✅ Backup completed${RESET}"
 	printf '%s\n' "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
 
-	printf '%s\n' "${BOLD}${BLUE}   📦 Archive:${RESET} $tar_file"
+	printf '%s\n' "${BOLD}${BLUE}   📦 Archive:${RESET}  $tar_file"
 	printf '%s\n' "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
-	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count - ${file_hidden} hidden "
+	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count (${file_hidden} hidden) "
 	printf '\n%s\t%s\n\n' "${BOLD}${BLUE}   💾 Size:${RESET}" "$file_size"
 	
 	hide_keyboard
