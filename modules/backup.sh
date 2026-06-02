@@ -30,20 +30,26 @@
 	required_commands tar stat numfmt
 
 # CHECK IF SOURCE FOLDER EXISTS
-	[[ -d "$GM_BACKUP_SOURCE" ]] || { log_error "source directory does not exist: $GM_BACKUP_SOURCE" >&2; exit 1; }
+	[[ -d "$GM_BACKUP_SOURCE" ]] || { clearscreen; log_error "source directory does not exist '$GM_BACKUP_SOURCE"'' >&2; exit 1; }
 
 # CREATE BACKUP FOLDER
-	mkdir -p "$GM_BACKUP_DEST" || { log_error "cannot create backup folder: $GM_BACKUP_DEST" >&2; exit 1; }
+	mkdir -p "$GM_BACKUP_DEST" 2>/dev/null || { clearscreen; log_error "cannot create backup folder '$GM_BACKUP_DEST' - permission denied" >&2; exit 1; }
 
 # CHECK IF BACKUP FOLDER EXISTS
-	[[ -d "$GM_BACKUP_DEST" ]] || { log_error "destination directory does not exist: $GM_BACKUP_DEST" >&2; exit 1; }
+	[[ -d "$GM_BACKUP_DEST" ]] || { clearscreen; log_error "destination directory does not exist '$GM_BACKUP_DEST'" >&2; exit 1; }
 
 # GET TRUE PATH
 	backup_source="$(cd "$GM_BACKUP_SOURCE" && pwd -P)"
 	backup_dest="$(cd "$GM_BACKUP_DEST" && pwd -P)"
 
 # CHECK IF SOURCE AND BACKUP FOLDER ARE THE SAME
-	[[ "$backup_source" == "$backup_dest" ]] && { log_error "backup source and destination cannot be the same directory" >&2; exit 1; }
+	[[ "$backup_source" == "$backup_dest" ]] && { 
+		clearscreen; 
+		log_error "backup source and destination cannot be the same directory" >&2; 
+		printf '        📂 %sSource:%s %s\n' "${BOLD}" "${RESET}" "'$backup_source'";
+		printf '   📂 %sDestination:%s %s\n\n' "${BOLD}" "${RESET}" "'$backup_dest'";
+		exit 1;
+		 }
 	
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M')"
@@ -97,7 +103,7 @@
 	printf '%s\n' "${GREEN}${BOLD}   ✅ Backup completed${RESET}"
 	printf '%s\n' "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
 
-	printf '%s\n' "${BOLD}${BLUE}   📦 Archive:${RESET}  $tar_file"
+	printf '%s\n' "${BOLD}${BLUE}   📦 Archive:${RESET}  '$tar_file'"
 	printf '%s\n' "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
 	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count (${file_hidden} hidden) "
 	printf '\n%s\t%s\n\n' "${BOLD}${BLUE}   💾 Size:${RESET}" "$file_size"
