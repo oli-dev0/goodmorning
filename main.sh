@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Version 0.6
+# Version 0.7
 
 # CONFIG
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
