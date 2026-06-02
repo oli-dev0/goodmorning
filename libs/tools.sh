@@ -151,6 +151,8 @@ run_module()
 	local module_path="$GM_MODULES_DIR/$module.sh"
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
 	local exit_code
+	
+	exit_code=0
 
 	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
@@ -158,7 +160,7 @@ run_module()
 	GM_CURRENT_TITLE="$saved_title"				# set title back to previous title
 	clearscreen														# clear but keep title
 
-	return "$exit_code"								# return exit code from bash command
+	return "$exit_code"										# return exit code from bash command or 0
 }
 
 ask_yes_no()

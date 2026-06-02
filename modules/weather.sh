@@ -82,7 +82,7 @@ weather_getinfo()
 
 # CHECK JSON STRUCTURE
 	log_start "weather - starting json check"; clearscreen
-	weather_jsoncheck "$weatherJson" || { printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
+	weather_jsoncheck "$weatherJson" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
 # DECLARE WEATHER VARIABLES FROM JSON
 	unset weather					# reset weather variable
