@@ -5,7 +5,7 @@
 	_TOOLS_LOADED=1 														# if its empty, continue sourcing, and set _tools_loaded to 1
 
 exit_code=0 							# need to declare here or it's undeclared from run_module tool
-GM_CURRENT_TITLE=""					# reset title when loading tools
+GM_CURRENT_TITLE=""				# reset title when loading tools
 
 # First 2 functions are derived from : Alexander Epstein https://github.com/alexanderepstein
 
@@ -46,13 +46,13 @@ http_get()			   # call the users configured client
 
 check_internet()
 {
-    # My VPN blocks ping, so this is a good way to simulate a broken internet without being broken
-  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; error "no active internet connection" >&2; move_line_up; anim_countdown "  ⚠️  Closing in" "3" "${WARNING}"; exit 1; }
+	# My VPN blocks ping, so this is a good way to simulate a broken internet without being broken
+  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; log_error "no active internet connection" >&2; return 1; }
   
 	# TCP connection to Google DNS (port 53) instead of ping
 	# VPNs commonly block ICMP packets, making ping unreliable
 	# TCP handshake achieves the same connectivity check without ICMP and MUCH faster than a curl
-  bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; move_line_up; anim_countdown "  ⚠️  Closing in" "3" "${WARNING}"; exit 1; }
+  bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; return 1; }
 }
 
 load_libs()
@@ -154,7 +154,7 @@ run_module()
 
 	bash "$module_path"
 	exit_code=$?											# get exit code of previous command 'bash'
-	GM_CURRENT_TITLE="$saved_title"			# set title back to previous title
+	GM_CURRENT_TITLE="$saved_title"		# set title back to previous title
 	clearscreen												# clear but keep title
 	[[ $exit_code -ne 0 ]] && exit 1	# exit 1 if 'bash' command gave an error
 	return 0													# this is needed for execute_shortcut to return correctly for the flow in main.sh
