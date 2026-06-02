@@ -108,8 +108,8 @@ parse_module() {
 	local IFS='|'																					# sets | as delimiter, to split the module info in config.sh
 	read -ra fields <<< "$entry"													# read from array $entry
 
-	module_name="${fields[0]}"														# weather (first)
-	module_question="${fields[-1]}"												# 🌤️  Weather (last)
+	GM_PARSED_module_name="${fields[0]}"														# weather (first)
+	GM_PARSED_module_question="${fields[-1]}"												# 🌤️  Weather (last)
 	module_shortcuts=("${fields[@]:1:${#fields[@]}-2}")		# everything in between
 }
 
@@ -123,10 +123,10 @@ validate_shortcuts()
 		for shortcut in "${module_shortcuts[@]}"; do
 			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
 				echo
-				log_error "duplicate shortcut '$shortcut' used by '$module_name' and '${seen_shortcuts[$shortcut]}'"
+				log_error "duplicate shortcut '$shortcut' used by '$GM_PARSED_module_name' and '${seen_shortcuts[$shortcut]}'"
 				return 1
 			fi
-			seen_shortcuts[$shortcut]="$module_name"
+			seen_shortcuts[$shortcut]="$GM_PARSED_module_name"
 		done
 	done
 }
@@ -138,9 +138,9 @@ validate_modules()
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 
-		if [[ ! -f "$GM_MODULES_DIR/$module_name.sh" ]]; then
+		if [[ ! -f "$GM_MODULES_DIR/$GM_PARSED_module_name.sh" ]]; then
 			echo
-			log_error "configured module '$module_name' does not exist at $GM_MODULES_DIR/$module_name.sh"
+			log_error "configured module '$GM_PARSED_module_name' does not exist at $GM_MODULES_DIR/$GM_PARSED_module_name.sh"
 			return 1
 		fi
 	done
