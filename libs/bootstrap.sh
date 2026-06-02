@@ -17,5 +17,5 @@
 	trap 'trap_error ${LINENO} "$BASH_COMMAND"' ERR
 
 # LOAD CONFIG
-	ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-	source "$ROOT_DIR/config.sh"
+	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+	source "$GM_ROOT_DIR/config.sh"

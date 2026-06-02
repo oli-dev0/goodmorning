@@ -82,7 +82,7 @@ Each module can:
 * Declare its own dependencies
 * Be added or removed without affecting other modules
 
-Modules are registered through the `MODULES` array in `config.sh`.
+Modules are registered through the `GM_MODULES` array in `config.sh`.
 
 Example:
 

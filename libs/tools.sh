@@ -57,7 +57,7 @@ load_libs()
 {
 	local lib
 	for lib in "$@"; do
-		source "$LIBS_DIR/$lib.sh"; done
+		source "$GM_LIBS_DIR/$lib.sh"; done
 }
 
 required_commands()
@@ -116,7 +116,7 @@ validate_shortcuts()
 	declare -A seen_shortcuts
 	local shortcut
 
-	for entry in "${MODULES[@]}"; do parse_module "$entry"
+	for entry in "${GM_MODULES[@]}"; do parse_module "$entry"
 
 		for shortcut in "${module_shortcuts[@]}"; do
 			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
@@ -132,11 +132,11 @@ validate_modules()
 {
 	local entry
 
-	for entry in "${MODULES[@]}"; do
+	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 
-		if [[ ! -f "$MODULES_DIR/$module_name.sh" ]]; then
-			log_error "configured module '$module_name' does not exist at $MODULES_DIR/$module_name.sh"
+		if [[ ! -f "$GM_MODULES_DIR/$module_name.sh" ]]; then
+			log_error "configured module '$module_name' does not exist at $GM_MODULES_DIR/$module_name.sh"
 			return 1
 		fi
 	done
@@ -145,7 +145,7 @@ validate_modules()
 run_module()
 {
 	local module="$1"
-	local module_path="$MODULES_DIR/$module.sh"
+	local module_path="$GM_MODULES_DIR/$module.sh"
 	local saved_title="$current_title"				# get previous title before running new script
 
 	[[ ! -f "$module_path" ]] && { echo -ne "\n"; log_error "module '$module' not found at $module_path" >&2; return 1; }

@@ -77,7 +77,7 @@ weather_getinfo()
 	check_internet || return 1											# check if online
 	# real curl > show error if no http_get client installed
 	weatherJson="$(http_get "https://wttr.in/${location}?format=j2")" || { log_error "weather - http_get"; move_line_up; anim_countdown "  ⚠️  Closing in" "3" "${WARNING}"; exit 1; }
-	# weatherJson=$(cat "$LIBS_DIR/wttr.json")							# local file for testing
+	# weatherJson=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 
 # CHECK JSON STRUCTURE

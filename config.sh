@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # PATHS
-	ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-	LIBS_DIR="$ROOT_DIR/libs"
-	MODULES_DIR="$ROOT_DIR/modules"
+	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+	GM_LIBS_DIR="$GM_ROOT_DIR/libs"
+	GM_MODULES_DIR="$GM_ROOT_DIR/modules"
 
 # LOAD TOOLS
-	source "$LIBS_DIR/tools.sh"				# makes load_libs available in other scripts
+	source "$GM_LIBS_DIR/tools.sh"				# makes load_libs available in other scripts
 
 # SET MESSAGES
 	# MAIN
@@ -25,7 +25,7 @@
 
 # SET MODULES - every new module needs to be setup here
 	# script name | shortcuts | question to ask?
-	MODULES=(
+	GM_MODULES=(
 		"weather|weather|w|🌤️  Weather"
 		"crypto|crypto|cryp|c|🪙  Crypto"
 		"backup|backup|back|bak|b|💾 Backup"

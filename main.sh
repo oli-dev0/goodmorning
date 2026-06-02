@@ -11,7 +11,7 @@
 # ASK MAIN QUESTIONS
 	list_questions()		# checks the modules array in config.sh > sends it to parser to get script, shortcuts, question > go over all of them 
 	{
-	for entry in "${MODULES[@]}"; do
+	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 		ask_qs "$module_question" "$module_name"
 	done
@@ -22,7 +22,7 @@
 	{
 	local answer="$1"
 
-	for entry in "${MODULES[@]}"; do
+	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 
 		for shortcut in "${module_shortcuts[@]}"; do
