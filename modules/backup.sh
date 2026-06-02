@@ -69,7 +69,6 @@
 	# printf '%s\n' "${BOLD}${BLUE}   📦 Folder:${RESET} $(basename "$BACKUP_DIR")"
 	printf '%s\n' "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
 	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count - ${file_hidden} hidden "
-	# [[ "$file_hidden" -eq 1 ]] && printf "file" || printf "files"
 	printf '\n%s\t%s\n\n' "${BOLD}${BLUE}   💾 Size:${RESET}" "$file_size"
 	
 	hide_keyboard
