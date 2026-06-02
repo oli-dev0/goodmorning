@@ -47,12 +47,12 @@ http_get()			   # call the users configured client
 check_internet()
 {
 	# My VPN blocks ping, so this is a good way to simulate a broken internet without being broken
-  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; log_error "no active internet connection" >&2; return 1; }
+  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; log_error "no active internet connection" >&2; exit 1; }
   
 	# TCP connection to Google DNS (port 53) instead of ping
 	# VPNs commonly block ICMP packets, making ping unreliable
 	# TCP handshake achieves the same connectivity check without ICMP and MUCH faster than a curl
-  bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; return 1; }
+  bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; exit 1; }
 }
 
 load_libs()
@@ -69,7 +69,7 @@ required_commands()
     for cmd in "$@"; do
         command -v "$cmd" >/dev/null 2>&1 || {
             echo
-            log_error "missing dependency: $cmd => please install \"$cmd\" to use this script."
+            log_error "missing dependency: '$cmd' => please install '$cmd' to use this script."
             exit 1
         }
     done
@@ -122,7 +122,7 @@ validate_shortcuts()
 
 		for shortcut in "${GM_PARSED_module_shortcuts[@]}"; do
 			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
-				echo
+				clearscreen
 				log_error "duplicate shortcut '$shortcut' used by '$GM_PARSED_module_name' and '${seen_shortcuts[$shortcut]}'"
 				return 1
 			fi
@@ -139,7 +139,8 @@ validate_modules()
 		parse_module "$entry"
 
 		if [[ ! -f "$GM_MODULES_DIR/$GM_PARSED_module_name.sh" ]]; then
-			log_error "configured module '$GM_PARSED_module_name' does not exist at $GM_MODULES_DIR/$GM_PARSED_module_name.sh"
+			clearscreen
+			log_error "configured module '$GM_PARSED_module_name' does not exist at '$GM_MODULES_DIR/$GM_PARSED_module_name.sh'"
 			return 1
 		fi
 	done
@@ -152,7 +153,7 @@ run_module()
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
 	local exit_code
 
-	[[ ! -f "$module_path" ]] && { log_error "module '$module' not found at $module_path" >&2; return 1; }
+	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
 	bash "$module_path"
 	exit_code=$?											# get exit code of previous command 'bash'

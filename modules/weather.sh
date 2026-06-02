@@ -45,16 +45,16 @@ weather_jsoncheck()
 	local json="$1"
 
 	# CHECK IF API RETURNED SOMETHING
-		[[ -z "$json" ]] && { clearscreen; move_line_up; log_error "weather - json check // empty response from weather API"; return 1; }
+		[[ -z "$json" ]] && { clearscreen; log_error "weather - json check // empty response from weather API"; return 1; }
 
 	# CHECK IF LOCATION IS CORRECT
-		[[ "$json" == *"location not found"* ]] && { clearscreen; move_line_up; log_error "weather // location not found"; return 1; }
+		[[ "$json" == *"location not found"* ]] && { clearscreen; log_error "weather // location not found"; return 1; }
 	
 	# VALIDATE JSON STRUCTURE
-		jq empty <<< "$json" 2>/dev/null || { clearscreen; move_line_up; log_error "weather - json check // invalid JSON file"; return 1; }
+		jq empty <<< "$json" 2>/dev/null || { clearscreen; log_error "weather - json check // invalid JSON file"; return 1; }
 	
 	# CHECK IF KNOWN FIELD EXISTS INSIDE JSON
-		jq -e '.current_condition[0]' <<< "$json" >/dev/null 2>&1 || { clearscreen; move_line_up; log_error "weather - json check // missing weather data"; return 1; }
+		jq -e '.current_condition[0]' <<< "$json" >/dev/null 2>&1 || { clearscreen; log_error "weather - json check // missing weather data"; return 1; }
 
 	return 0
 }
@@ -76,7 +76,7 @@ weather_getinfo()
 # FETCH JSON
 	check_internet || return 1											# check if online
 	# real curl > show error if no http_get client installed
-	weatherJson="$(http_get "https://wttr.in/${location}?format=j2")" || { log_error "weather - http_get"; move_line_up; move_line_up; anim_countdown "  ⚠️  Closing in" "3" "${WARNING}"; exit 1; }
+	weatherJson="$(http_get "https://wttr.in/${location}?format=j2")" || { log_error "weather - http_get"; move_line_up; move_line_up; exit 1; }
 	# weatherJson=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 
