@@ -10,9 +10,8 @@
 #	Usage:																			#
 #	 ./backup.sh																	#
 #																					#
-#	- No arguments needed, backs up the directory it lives in						#
+#	- Configure the directories in config.sh										#
 #	- The backup folder itself is excluded from the archive						 	#
-#	- Backups are stored in: ./backup/YYYY-MM-DD_HH-MM.tar.gz						#
 #																					#
 #	Output:																		 	#
 #	- Timestamp, file count, archive size, and hidden file count					#
