@@ -149,6 +149,7 @@ run_module()
 	local module="$1"
 	local module_path="$GM_MODULES_DIR/$module.sh"
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
+	local exit_code
 
 	[[ ! -f "$module_path" ]] && { echo -ne "\n"; log_error "module '$module' not found at $module_path" >&2; return 1; }
 
@@ -156,8 +157,8 @@ run_module()
 	exit_code=$?											# get exit code of previous command 'bash'
 	GM_CURRENT_TITLE="$saved_title"		# set title back to previous title
 	clearscreen												# clear but keep title
-	[[ $exit_code -ne 0 ]] && exit 1	# exit 1 if 'bash' command gave an error
-	return 0													# this is needed for execute_shortcut to return correctly for the flow in main.sh
+
+	return "$exit_code"								# return exit code from bash command
 }
 
 ask_yes_no()
