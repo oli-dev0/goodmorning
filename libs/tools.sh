@@ -122,6 +122,7 @@ validate_shortcuts()
 
 		for shortcut in "${module_shortcuts[@]}"; do
 			if [[ -n "${seen_shortcuts[$shortcut]:-}" ]]; then
+				echo
 				log_error "duplicate shortcut '$shortcut' used by '$module_name' and '${seen_shortcuts[$shortcut]}'"
 				return 1
 			fi
@@ -138,6 +139,7 @@ validate_modules()
 		parse_module "$entry"
 
 		if [[ ! -f "$GM_MODULES_DIR/$module_name.sh" ]]; then
+			echo
 			log_error "configured module '$module_name' does not exist at $GM_MODULES_DIR/$module_name.sh"
 			return 1
 		fi
