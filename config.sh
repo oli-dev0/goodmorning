@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # PATHS
-	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 	GM_LIBS_DIR="$GM_ROOT_DIR/libs"
 	GM_MODULES_DIR="$GM_ROOT_DIR/modules"
 
