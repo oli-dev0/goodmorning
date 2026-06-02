@@ -158,6 +158,30 @@ run_module()
 	return 0													# this is needed for execute_shortcut to return correctly for the flow in main.sh
 }
 
+ask_yes_no()
+{
+	local prompt=${1:-Do you want to continue?}
+	local answer
+
+	while true; do
+		read -rp " ${BOLD}${prompt}${RESET} [y/n] " answer
+		answer="${answer,,}"
+
+		case "$answer" in
+			y|ye|yes|ok|k|"")
+				return 0
+				;;
+			n|no|nop|nope)
+				return 1
+				;;
+			*)
+				clearscreen
+				printf " %s\n\n" "$msg_invalid_input"
+				;;
+		esac
+	done
+}
+
 log_start()
 {
 	local msg=${1:-Starting...}

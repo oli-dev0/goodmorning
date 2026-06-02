@@ -31,23 +31,11 @@
 
 # ASK
 	clearscreen
-	while true; do
-		read -rp " ${BOLD}Do you want to make a backup?${RESET} [y/n] " backup_answer
-
-		case "$backup_answer" in
-			y|ye|yes|ok|k|"")
-				break
-				;;
-			n|no|nop|nope)
-				clear
-				exit 0
-				;;
-			*)
-				clearscreen
-				printf ' %s\n\n' "$msg_invalid_input"
-				;;
-		esac
-	done
+	if ! ask_yes_no "Do you want to make a backup?"; then
+		anim_moving_on
+		clear
+		exit 0
+	fi
 
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M')"

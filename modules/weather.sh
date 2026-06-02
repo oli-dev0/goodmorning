@@ -45,16 +45,16 @@ weather_jsoncheck()
 	local json="$1"
 
 	# CHECK IF API RETURNED SOMETHING
-		[[ -z "$json" ]] && { clearscreen; log_error "weather - json check // empty response from weather API"; return 1; }
+		[[ -z "$json" ]] && { clearscreen; move_line_up; log_error "weather - json check // empty response from weather API"; return 1; }
 
 	# CHECK IF LOCATION IS CORRECT
-		[[ "$json" == *"location not found"* ]] && { clearscreen; log_error "weather // location not found"; return 1; }
+		[[ "$json" == *"location not found"* ]] && { clearscreen; move_line_up; log_error "weather // location not found"; return 1; }
 	
 	# VALIDATE JSON STRUCTURE
-		jq empty <<< "$json" 2>/dev/null || { clearscreen; log_error "weather - json check // invalid JSON file"; return 1; }
+		jq empty <<< "$json" 2>/dev/null || { clearscreen; move_line_up; log_error "weather - json check // invalid JSON file"; return 1; }
 	
 	# CHECK IF KNOWN FIELD EXISTS INSIDE JSON
-		jq -e '.current_condition[0]' <<< "$json" >/dev/null 2>&1 || { clearscreen; log_error "weather - json check // missing weather data"; return 1; }
+		jq -e '.current_condition[0]' <<< "$json" >/dev/null 2>&1 || { clearscreen; move_line_up; log_error "weather - json check // missing weather data"; return 1; }
 
 	return 0
 }
@@ -82,7 +82,7 @@ weather_getinfo()
 
 # CHECK JSON STRUCTURE
 	log_start "weather - starting json check"; clearscreen
-	weather_jsoncheck "$weatherJson" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
+	weather_jsoncheck "$weatherJson" || { printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
 # DECLARE WEATHER VARIABLES FROM JSON
 	unset weather					# reset weather variable
@@ -157,29 +157,13 @@ get_weather_ask()
 	while $running; do
 		clearscreen
 		get_weather "${1:-}" || true
-		set --								# clears all arguments from ./weather.sh "arg"
-											# so that new loop can ask for location
-		while true; do
-
-			read -rp " Another location? [y/n] " answer
-			answer="${answer,,}"	
-
-			case "$answer" in
-				y|ye|yes|ok|k|"")
-					break							# break inner loop, so runs get_weather again
-					;;
-				n|no|nop|nope)
-					anim_moving_on
-					clear
-					running=false
-					break
-					;;
-				*)
-					clearscreen
-					printf ' %s\n\n' "$msg_invalid_input"
-					;;
-			esac
-		done
+		set --										# clears all arguments from ./weather.sh "arg"
+													# so that new loop can ask for location
+		if ! ask_yes_no "Another location?"; then 	# if answer no, move on and close loop by setting running to false
+			anim_moving_on
+			clear
+			running=false
+		fi
 	done
 }
 
