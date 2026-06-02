@@ -35,29 +35,8 @@ bash modules/backup.sh
 ├── main.sh              # Application entry point
 ├── config.sh            # Configuration and module registry
 ├── libs/                # Shared libraries and utilities
-└── modules/             # Feature modules
+└── modules/             # Individual feature modules
 ```
-## 🏗️ How It Works
-
-### `main.sh`
-
-The application entry point.
-
-### `config.sh`
-
-Contains the module registry, shortcut definitions, and project settings.
-
-### `libs/bootstrap.sh`
-
-Loads and initializes shared project resources.
-
-### `libs/tools.sh`
-
-Provides reusable helper and utility functions used throughout the project.
-
-### `modules/`
-
-Contains the individual feature modules.
 
 ## ⚙️ Configuration
 
