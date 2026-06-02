@@ -5,7 +5,7 @@
 	_TOOLS_LOADED=1 														# if its empty, continue sourcing, and set _tools_loaded to 1
 
 exit_code=0 							# need to declare here or it's undeclared from run_module tool
-current_title=""					# reset title when loading tools
+GM_CURRENT_TITLE=""					# reset title when loading tools
 
 # First 2 functions are derived from : Alexander Epstein https://github.com/alexanderepstein
 
@@ -146,13 +146,13 @@ run_module()
 {
 	local module="$1"
 	local module_path="$GM_MODULES_DIR/$module.sh"
-	local saved_title="$current_title"				# get previous title before running new script
+	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
 
 	[[ ! -f "$module_path" ]] && { echo -ne "\n"; log_error "module '$module' not found at $module_path" >&2; return 1; }
 
 	bash "$module_path"
 	exit_code=$?											# get exit code of previous command 'bash'
-	current_title="$saved_title"			# set title back to previous title
+	GM_CURRENT_TITLE="$saved_title"			# set title back to previous title
 	clearscreen												# clear but keep title
 	[[ $exit_code -ne 0 ]] && exit 1	# exit 1 if 'bash' command gave an error
 	return 0													# this is needed for execute_shortcut to return correctly for the flow in main.sh
@@ -228,11 +228,11 @@ trap_error()			# standard message for trap errors
 
 set_title()
 {
-	current_title="$1"
+	GM_CURRENT_TITLE="$1"
 }
 
 clearscreen()
 {
 	clear
-	[[ -n "$current_title" ]] && echo -e "\n   ${TITLE} $current_title  ${RESET}\n "
+	[[ -n "$GM_CURRENT_TITLE" ]] && echo -e "\n   ${TITLE} $GM_CURRENT_TITLE  ${RESET}\n "
 }
