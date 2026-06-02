@@ -58,8 +58,7 @@ check_internet()
 load_libs()
 {
 	local lib
-	for lib in "$@"; do
-		source "$GM_LIBS_DIR/$lib.sh"; done
+	for lib in "$@"; do	source "$GM_LIBS_DIR/$lib.sh"; done
 }
 
 required_commands()
@@ -155,10 +154,9 @@ run_module()
 
 	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
-	bash "$module_path"
-	exit_code=$?											# get exit code of previous command 'bash'
-	GM_CURRENT_TITLE="$saved_title"		# set title back to previous title
-	clearscreen												# clear but keep title
+	bash "$module_path" || exit_code=$?		# get exit code of previous command 'bash'
+	GM_CURRENT_TITLE="$saved_title"				# set title back to previous title
+	clearscreen														# clear but keep title
 
 	return "$exit_code"								# return exit code from bash command
 }
