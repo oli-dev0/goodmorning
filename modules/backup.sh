@@ -30,10 +30,10 @@
 	required_commands tar stat numfmt
 
 # CHECK IF SOURCE FOLDER EXISTS
-	[[ -d "$GM_BACKUP_SOURCE" ]] || { clearscreen; log_error "source directory does not exist '$GM_BACKUP_SOURCE"'' >&2; exit 1; }
+	[[ -d "$GM_BACKUP_SOURCE" ]] || { clearscreen; log_error "source directory does not exist '$GM_BACKUP_SOURCE'" >&2; exit 1; }
 
 # CREATE BACKUP FOLDER
-	mkdir -p "$GM_BACKUP_DEST" 2>/dev/null || { clearscreen; log_error "cannot create backup folder '$GM_BACKUP_DEST' - permission denied" >&2; exit 1; }
+	mkdir -p "$GM_BACKUP_DEST" 2>/dev/null || { clearscreen; log_error "cannot create backup folder '$GM_BACKUP_DEST' - check path or permission" >&2; exit 1; }
 
 # CHECK IF BACKUP FOLDER EXISTS
 	[[ -d "$GM_BACKUP_DEST" ]] || { clearscreen; log_error "destination directory does not exist '$GM_BACKUP_DEST'" >&2; exit 1; }
@@ -43,13 +43,13 @@
 	backup_dest="$(cd "$GM_BACKUP_DEST" && pwd -P)"
 
 # CHECK IF SOURCE AND BACKUP FOLDER ARE THE SAME
-	[[ "$backup_source" == "$backup_dest" ]] && { 
-		clearscreen; 
-		log_error "backup source and destination cannot be the same directory" >&2; 
-		printf '        📂 %sSource:%s %s\n' "${BOLD}" "${RESET}" "'$backup_source'";
-		printf '   📂 %sDestination:%s %s\n\n' "${BOLD}" "${RESET}" "'$backup_dest'";
-		exit 1;
-		 }
+	if [[ "$backup_source" == "$backup_dest" ]]; then
+		clearscreen
+		log_error "backup source and destination cannot be the same directory" >&2
+		printf '        📂 %sSource:%s %s\n' "${BOLD}" "${RESET}" "'$backup_source'"
+		printf '   📂 %sDestination:%s %s\n\n' "${BOLD}" "${RESET}" "'$backup_dest'"
+		exit 1
+	fi
 	
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M')"
@@ -58,20 +58,20 @@
 # EXCLUSIONS
 	# fixed excludes, can be added with +=
 	tar_excludes=(
-		--exclude="./tmp"
-		--exclude="./cache"
+	--exclude="./tmp"
+	--exclude="./cache"
 	)
 
 	# exclude backup folder from being backed up
-		if [[ "$backup_dest" == "$backup_source"/* ]]; then				# if backup dest is inside source
-			backup_relative_path="${backup_dest#"$backup_source"/}"		# then get relative path (this is needed because tar -C)
-			tar_excludes+=(--exclude="./$backup_relative_path")			# add exclusion to array
-		fi
+	if [[ "$backup_dest" == "$backup_source"/* ]]; then				# if backup dest is inside source
+		backup_relative_path="${backup_dest#"$backup_source"/}"		# then get relative path (this is needed because tar -C)
+		tar_excludes+=(--exclude="./$backup_relative_path")			# add exclusion to array
+	fi
 	
 	# exclude current archive if created inside source (edge case)
-		if [[ "$tar_file" == "$backup_source"/* ]]; then				# if created tar sits inside source
-			tar_excludes+=(--exclude="./${tar_file#"$backup_source"/}")	# exclude it
-		fi
+	if [[ "$tar_file" == "$backup_source"/* ]]; then				# if created tar sits inside source
+		tar_excludes+=(--exclude="./${tar_file#"$backup_source"/}")	# exclude it
+	fi
 
 # ASK
 	clearscreen
