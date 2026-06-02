@@ -160,7 +160,7 @@ run_module()
 
 ask_yes_no()
 {
-	local prompt=${1:-Do you want to continue?}
+	local prompt=${1:- Do you want to continue? [y/n] }
 	local answer
 
 	while true; do

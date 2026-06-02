@@ -66,32 +66,15 @@ ask_begin ()	# start of module
 
 ask_qs() 	# function to ask if user wants to run module
 {
-	local answer			# set answer variable only in this function
 	local question="$1"		# set question from first argument
 	local module="$2"		# set module name from second argument
 
-	while true; do
-		read -rp " ${BOLD}$question?${RESET} [y/n] " answer
-		answer="${answer,,}"	# lowercase
-
-		case "$answer" in
-			y|ye|yes|ok|k|"")
-				run_module "$module"
-				break
-				;;
-			n|no|nop|nope)
-				echo
-				clearscreen
-				anim_moving_on
-				clearscreen
-				break
-				;;
-			*)
-				clearscreen
-				echo -e " ${msg_invalid_input} \n"
-				;;
-		esac
-	done
+	if ask_yes_no "${question}?"; then
+		run_module "$module"
+	else
+		anim_moving_on
+		clearscreen
+	fi
 }
 
 ask_more()					# triggers once all questions are asked or after a shortcut was used
