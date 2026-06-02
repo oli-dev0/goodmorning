@@ -91,7 +91,7 @@ required_commands bc
   	local color="${3:-}"
 
   	hide_keyboard
-  	printf "\n%s" "$color"
+  	printf "%s" "$color"
 
   	for (( i=seconds; i>=1; i-- )); do
   	  printf "\r %s %s " "$msg" "$i"

@@ -22,7 +22,7 @@ http_get_client()   # determines http get tool
   elif command -v fetch &>/dev/null; then
 		http_client="fetch"
   else
-		log_error "this tool requires either curl, wget, httpie or fetch to be installed." >&2
+		log_error "no http_get tool installed - this script requires either curl, wget, httpie or fetch to be installed." >&2
 		exit 1
   fi
 }
@@ -32,7 +32,9 @@ http_get()			   # call the users configured client
   # Get client if empty, else just use client
   # You don't need to get client inside a script everytime
   # just use http_get when needed
-	[[ -z "${http_client:-}" ]] && http_get_client || { log_error "no http_get tool installed"; return 1; }
+	if [[ -z "${http_client:-}" ]]; then
+		http_get_client || return 1
+	fi
 	
   case "$http_client" in
 	curl)  curl -A curl -s "$@" ;;
@@ -203,7 +205,7 @@ log_warning()
 log_error()
 {
 	local msg=${1:-unknown error}
-	printf '\n%s\n' "${ERROR} ❌ Error:${RESET}${ERRORTEXT} ${msg} ${RESET}"
+	printf '%s\n\n' "${ERROR} ❌ Error:${RESET}${ERRORTEXT} ${msg} ${RESET}"
 }
 
 trap_error()			# standard message for trap errors
