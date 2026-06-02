@@ -6,9 +6,9 @@
 	load_libs styles animations			# add lib name here
 	set_title "   ☀️  Good Morning   "
 	validate_modules					# check that configured modules have a .sh file
-	validate_shortcuts					# checking for duplicate modules shortcuts in config.sh
+	validate_shortcuts					# checking for duplicate module shortcuts in config.sh
 
-# SET MAIN QUESTIONS
+# ASK MAIN QUESTIONS
 	list_questions()		# checks the modules array in config.sh > sends it to parser to get script, shortcuts, question > go over all of them 
 	{
 	for entry in "${MODULES[@]}"; do
@@ -94,7 +94,7 @@ ask_qs() 	# function to ask if user wants to run module
 	done
 }
 
-ask_more()
+ask_more()					# triggers once all questions are asked or after a shortcut was used
 {
 	local answer
 
