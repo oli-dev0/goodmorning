@@ -6,7 +6,7 @@
 	GM_MODULES_DIR="$GM_ROOT_DIR/modules"
 
 # LOAD TOOLS
-	source "$GM_LIBS_DIR/tools.sh"				# makes load_libs available in other scripts
+	source "$GM_LIBS_DIR/tools.sh"			# makes load_libs available in other scripts
 
 # SET MESSAGES
 	# MAIN
@@ -24,7 +24,9 @@
 		msg_invalid_input="Invalid input, please use [y/n]"
 
 # SET MODULES - every new module needs to be setup here
-	# script name | shortcuts | question to ask?
+	# only module name is required, rest is optional
+	# module name must equal the script.sh name in modules folder
+	# module name | shortcuts | question to ask?
 	GM_MODULES=(
 		"weather|weather|w|🌤️  Weather"
 		"crypto|crypto|cryp|c|🪙  Crypto"
