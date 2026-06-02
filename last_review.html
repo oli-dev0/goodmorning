@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GoodMorning Final Code Review Tasks</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1116;
+      --panel: #151a22;
+      --panel-soft: #1b222d;
+      --text: #e8edf4;
+      --muted: #aab4c2;
+      --line: #2a3342;
+      --must: #ff6b6b;
+      --should: #f2c94c;
+      --could: #7dd3fc;
+      --good: #6ee7b7;
+      --link: #8ab4ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 56px;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      margin-top: 36px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 1.08rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    a {
+      color: var(--link);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 760px;
+      margin-top: 14px;
+      font-size: 1.05rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 6px 10px;
+      background: var(--panel);
+      font-size: 0.9rem;
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .task {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+
+    .task-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .priority {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+    }
+
+    .must {
+      background: color-mix(in srgb, var(--must) 18%, transparent);
+      color: var(--must);
+      border: 1px solid color-mix(in srgb, var(--must) 55%, transparent);
+    }
+
+    .should {
+      background: color-mix(in srgb, var(--should) 16%, transparent);
+      color: var(--should);
+      border: 1px solid color-mix(in srgb, var(--should) 55%, transparent);
+    }
+
+    .could {
+      background: color-mix(in srgb, var(--could) 16%, transparent);
+      color: var(--could);
+      border: 1px solid color-mix(in srgb, var(--could) 55%, transparent);
+    }
+
+    .label {
+      color: var(--muted);
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .task p {
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .task ul,
+    .good-list {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    .task li,
+    .good-list li {
+      margin: 5px 0;
+    }
+
+    code {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      color: #d9e7ff;
+      padding: 1px 5px;
+    }
+
+    pre {
+      background: #0b0e13;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 10px 0 0;
+      overflow: auto;
+      padding: 12px;
+    }
+
+    pre code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+    }
+
+    .good {
+      border: 1px solid color-mix(in srgb, var(--good) 45%, transparent);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--good) 8%, var(--panel));
+      padding: 18px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      margin-top: 32px;
+      padding-top: 18px;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>GoodMorning Final Code Review Tasks</h1>
+      <p class="subtitle">
+        Senior Bash review summary for the standalone local GoodMorning app.
+        The focus is practical maintainability, Bash safety, error handling,
+        user experience, and small improvements that fit this app.
+      </p>
+      <div class="meta">
+        <span class="pill">Project: GM final code review tasks</span>
+        <span class="pill">Review date: June 2, 2026</span>
+        <span class="pill">Scope: full Bash app</span>
+        <span class="pill">Mode: read-only review</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>Tasks</h2>
+      <div class="task-grid">
+        <article class="task">
+          <div class="task-head">
+            <h3>Fix <code>http_get</code> Reuse Bug</h3>
+            <span class="priority must">Must</span>
+          </div>
+          <p><span class="label">Problem</span><code>http_get()</code> fails after <code>http_client</code> has already been set because the line uses <code>A &amp;&amp; B || C</code> as if it were if/else logic.</p>
+          <p><span class="label">Why it matters</span>Weather calls <code>http_get</code> twice. The second call can incorrectly return <code>no http_get tool installed</code>.</p>
+          <p><span class="label">Suggested solution</span>Replace the shortcut logic with an explicit <code>if</code>.</p>
+          <pre><code>if [[ -z "${http_client:-}" ]]; then
+    http_get_client || return 1
+fi</code></pre>
+          <p><span class="label">Files/functions likely affected</span><code>libs/tools.sh</code>: <code>http_get</code>; <code>modules/weather.sh</code>: <code>weather_getinfo</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Make Weather HTTP Calls Client-Safe</h3>
+            <span class="priority must">Must</span>
+          </div>
+          <p><span class="label">Problem</span>The emoji fetch calls <code>http_get</code> with a curl-specific <code>-s</code> flag.</p>
+          <p><span class="label">Why it matters</span><code>http_get</code> is meant to hide the chosen client. Passing client-specific flags makes behavior fragile for <code>wget</code>, <code>httpie</code>, or <code>fetch</code>.</p>
+          <p><span class="label">Suggested solution</span>Pass only the URL to <code>http_get</code>, and include <code>https://</code>.</p>
+          <pre><code>weather[emoji]="$(http_get "https://wttr.in/${location}?format=%c")"</code></pre>
+          <p><span class="label">Files/functions likely affected</span><code>modules/weather.sh</code>: <code>weather_getinfo</code>; <code>libs/tools.sh</code>: <code>http_get</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Stop Helper Functions From Exiting the Whole App</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span>Shared helpers sometimes call <code>exit 1</code> directly, including <code>check_internet</code>, <code>required_commands</code>, and <code>run_module</code>.</p>
+          <p><span class="label">Why it matters</span>In a launcher app, one module failure should usually return to the app cleanly instead of killing the whole session.</p>
+          <p><span class="label">Suggested solution</span>Prefer <code>return 1</code> in reusable helpers. Let top-level scripts decide whether to exit.</p>
+          <p><span class="label">Files/functions likely affected</span><code>libs/tools.sh</code>: <code>check_internet</code>, <code>required_commands</code>, <code>run_module</code>; module callers</p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Make Bootstrap Error Handling Independent of Styles</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span><code>trap_error</code> and <code>log_error</code> use style variables like <code>ERROR</code>, <code>RESET</code>, and <code>ERRORTEXT</code>, but bootstrap installs traps before styles are loaded.</p>
+          <p><span class="label">Why it matters</span>If an error happens early, strict mode can cause the error handler itself to fail because style variables are unset.</p>
+          <p><span class="label">Suggested solution</span>Either load styles before installing traps, or make <code>log_error</code> tolerate missing style variables with defaults.</p>
+          <p><span class="label">Files/functions likely affected</span><code>libs/bootstrap.sh</code>; <code>libs/tools.sh</code>: <code>log_error</code>, <code>trap_error</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Replace Global Parser Output With Safer Module Parsing</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span><code>parse_module</code> writes globals: <code>module_name</code>, <code>module_question</code>, and <code>module_shortcuts</code>.</p>
+          <p><span class="label">Why it matters</span>This is easy to break later. A future function can accidentally reuse or overwrite those globals.</p>
+          <p><span class="label">Suggested solution</span>Keep it simple: document these globals clearly or rename them with a <code>GM_PARSED_</code> prefix. Longer term, parse inside the loop using local variables.</p>
+          <p><span class="label">Files/functions likely affected</span><code>libs/tools.sh</code>: <code>parse_module</code>; <code>main.sh</code>: <code>list_questions</code>, <code>execute_shortcut</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Harden Config Entry Validation</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span><code>GM_MODULES</code> entries depend on pipe-delimited fields. There is no validation for malformed entries, empty script names, empty questions, or accidental <code>|</code> inside labels.</p>
+          <p><span class="label">Why it matters</span>A small typo in config can produce confusing runtime behavior.</p>
+          <p><span class="label">Suggested solution</span>Extend <code>validate_modules</code> or add <code>validate_module_config</code> to check minimum field count and non-empty fields.</p>
+          <p><span class="label">Files/functions likely affected</span><code>config.sh</code>; <code>libs/tools.sh</code>: <code>parse_module</code>, <code>validate_modules</code>, <code>validate_shortcuts</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Fix Backup Path Assumptions</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span>Backup excludes only <code>./${BACKUP_DIR##*/}</code>. That works only when the backup directory is a direct child of the source directory and basename matching is enough.</p>
+          <p><span class="label">Why it matters</span>If <code>BACKUP_DIR</code> changes to a nested path inside <code>DIR_TO_BACKUP</code>, previous backups may be included recursively.</p>
+          <p><span class="label">Suggested solution</span>Validate <code>DIR_TO_BACKUP</code> exists, resolve both paths, and exclude the backup path relative to the source when it is inside the source.</p>
+          <p><span class="label">Files/functions likely affected</span><code>modules/backup.sh</code>; <code>config.sh</code>: <code>DIR_TO_BACKUP</code>, <code>BACKUP_DIR</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Clean Up Placeholder Crypto Module Behavior</h3>
+            <span class="priority should">Should</span>
+          </div>
+          <p><span class="label">Problem</span><code>crypto</code> is registered as a real module, but <code>modules/crypto.sh</code> only prints test text and sleeps.</p>
+          <p><span class="label">Why it matters</span>From the launcher UX, it looks like a supported feature but behaves like a stub.</p>
+          <p><span class="label">Suggested solution</span>Either remove it from <code>GM_MODULES</code> until ready, or make the module show a clear "not implemented yet" message and exit cleanly.</p>
+          <p><span class="label">Files/functions likely affected</span><code>config.sh</code>; <code>modules/crypto.sh</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Align README With Actual Weather Behavior</h3>
+            <span class="priority could">Could</span>
+          </div>
+          <p><span class="label">Problem</span>README shows running weather with two location arguments, but the script only uses the first argument.</p>
+          <p><span class="label">Why it matters</span>Docs should teach the actual interface, especially in a learning project.</p>
+          <p><span class="label">Suggested solution</span>Show one location per run, or update weather to handle multiple locations intentionally.</p>
+          <p><span class="label">Files/functions likely affected</span><code>README.md</code>; optionally <code>modules/weather.sh</code></p>
+        </article>
+
+        <article class="task">
+          <div class="task-head">
+            <h3>Guard Terminal State Functions</h3>
+            <span class="priority could">Could</span>
+          </div>
+          <p><span class="label">Problem</span><code>hide_keyboard</code>, <code>show_keyboard</code>, and <code>clear</code> assume an interactive terminal.</p>
+          <p><span class="label">Why it matters</span>Running scripts from non-interactive contexts, cron, redirected stdin, or tests can fail noisily.</p>
+          <p><span class="label">Suggested solution</span>Guard terminal operations with <code>[[ -t 0 ]]</code> / <code>[[ -t 1 ]]</code>, and tolerate missing <code>TERM</code>.</p>
+          <p><span class="label">Files/functions likely affected</span><code>libs/tools.sh</code>: <code>hide_keyboard</code>, <code>show_keyboard</code>, <code>clearscreen</code>, <code>flushread</code></p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Already Good</h2>
+      <div class="good">
+        <ul class="good-list">
+          <li>The app structure is understandable: <code>main.sh</code>, <code>config.sh</code>, <code>libs/</code>, and <code>modules/</code> are clean for a local standalone Bash app.</li>
+          <li><code>set -Eeuo pipefail</code> is a good baseline.</li>
+          <li>Module validation and duplicate shortcut validation are practical and useful.</li>
+          <li>Quoting is generally solid around paths and user input.</li>
+          <li>Keeping modules runnable directly is a good design choice for this kind of app.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      Linear project:
+      <a href="https://linear.app/blockop/project/gm-final-code-review-tasks-ab7016004403">
+        GM final code review tasks
+      </a>
+    </footer>
+  </main>
+</body>
+</html>

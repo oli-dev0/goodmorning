@@ -101,7 +101,7 @@ weather_getinfo()
 	weather[maxtemp]="$(jq -r '.weather[0].maxtempC' <<< "$weatherJson")"
 	weather[sunhr]="$(jq -r '.weather[0].sunHour' <<< "$weatherJson")"
 	weather[snow]="$(jq -r '.weather[0].totalSnow_cm' <<< "$weatherJson")"
-	weather[emoji]="$(http_get -s "wttr.in/${location// /%20}?format=%c")"
+	weather[emoji]="$(http_get "https://wttr.in/${location// /%20}?format=%c")"
 }
 
 weather_warnings()
