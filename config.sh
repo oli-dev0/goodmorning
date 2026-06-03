@@ -31,20 +31,26 @@
 		"weather|weather|w|🌤️  Weather"
 		"crypto|crypto|cryp|c|🪙  Crypto"
 		"backup|backup|back|bak|b|💾 Backup"
+		"nas_backup_rsync|rs|☁️  Sync backups to NAS"
 	)
 
 # WEATHER
 	# nothing to configure for weather module
 
-# BACKUP - THESE FOLDERS MAY NOT BE THE SAME
+# LOCAL BACKUP - THESE FOLDERS MAY NOT BE THE SAME
 	GM_BACKUP_SOURCE="$HOME/Coding"				# what to backup
 	GM_BACKUP_DEST="$HOME/Coding/backups"		# where to backup (this folder is excluded from being backed up)
 
+# NAS BACKUP RSYNC
+	GM_LOCAL_BACKUP_DIR="$GM_BACKUP_DEST/"				# what folder to sync with your NAS
+	GM_NAS_TARGET="nas:/volume1/Data/Backups/Coding/"	# where to sync on your NAS
+	GM_NAS_PATH="${GM_NAS_TARGET#nas:}"					# need path for script
+
 # CRYPTO
 	# API TO CALL
-		crypto_api=""				# currently empty because crypto script is WIP, not sure which API I will use
+		GM_CRYPTO_API=""				# currently empty because crypto script is WIP, not sure which API I will use
 	# SET BASE CURRENCY (EUR, AUD, USD etc)
-		crypto_base_currency="EUR"
+		GM_CRYPTO_BASE_CURRENCY="EUR"
 	# SET FAVORITES
-		crypto_favorites=("BTC" "ETH" "ADA" "SUI" "WPAY" "WXT" "ALPHA")
+		GM_CRYPTO_FAVORITES=("BTC" "ETH" "ADA" "SUI" "WPAY" "WXT" "ALPHA")
 

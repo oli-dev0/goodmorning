@@ -5,3 +5,4 @@
 	load_libs  						# add lib names here
 	set_title "🌤️ MODULE TITLE 🌤️"	# Adjust title
 	required_commands jq bc 		# checks for required commands
+	clearscreen 					# this is to show the title on startup

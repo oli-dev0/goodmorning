@@ -6,6 +6,7 @@
 
 # PRESETS
 	#GLOBAL
+		INFO=$'\e[1;34m'
 		SUCCESS=$'\e[1;92m'
 		WARNING=$'\e[1;33m'
 		ERROR=$'\e[1;91m'

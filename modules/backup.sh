@@ -28,6 +28,8 @@
 	load_libs animations
 	set_title "💾 BACKUP 💾"
 	required_commands tar stat numfmt
+	clearscreen 	# this is to show the title on startup
+# ps: backup directories are set in config.sh
 
 # CHECK IF SOURCE FOLDER EXISTS
 	[[ -d "$GM_BACKUP_SOURCE" ]] || { clearscreen; log_error "source directory does not exist '$GM_BACKUP_SOURCE'" >&2; exit 1; }
@@ -74,7 +76,6 @@
 	fi
 
 # ASK
-	clearscreen
 	if ! ask_yes_no "Do you want to make a backup?"; then
 		anim_moving_on
 		clear
@@ -83,8 +84,7 @@
 
 # PROGRESS ANIMATION
 	clearscreen
-	log_start "Backup started..."; sleep 0.3
-	clearscreen
+	log_start "backup started"; clearscreen
 	anim_status_bar "Backup in progress...  "; sleep 0.5
 
 # MAKE BACKUP
@@ -103,10 +103,10 @@
 	printf '%s\n' "${GREEN}${BOLD}   ✅ Backup completed${RESET}"
 	printf '%s\n' "${GREEN}   ━━━━━━━━━━━━━━━━━━━━${RESET}"
 
-	printf '%s\n' "${BOLD}${BLUE}   📦 Archive:${RESET}  '$tar_file'"
-	printf '%s\n' "${BOLD}${BLUE}   🕒 Time:${RESET}	${timestamp//_/ at } "
-	printf '%s' "${BOLD}${BLUE}   📄 Files:${RESET}	$file_count (${file_hidden} hidden) "
-	printf '\n%s\t%s\n\n' "${BOLD}${BLUE}   💾 Size:${RESET}" "$file_size"
+	printf '%s\n' "${INFO}   📦 Archive:${RESET}  '$tar_file'"
+	printf '%s\n' "${INFO}   🕒 Time:${RESET}	${timestamp//_/ at } "
+	printf '%s' "${INFO}   📄 Files:${RESET}	$file_count (${file_hidden} hidden) "
+	printf '\n%s\t%s\n\n' "${INFO}   💾 Size:${RESET}" "$file_size"
 	
 	hide_keyboard
 	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline

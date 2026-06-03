@@ -94,7 +94,11 @@ show_keyboard()		 # enable keyboard input and display
 
 move_line_up()
 {
-  printf "\033[1A\033[2K\r"
+	local lines="${1:-1}"
+
+	for ((i=0; i<lines; i++)); do
+	  printf '\033[1A\033[2K\r'
+	done
 }
 
 clearline()			 # goes to beginning and clears entired current line
@@ -220,7 +224,7 @@ trap_error()			# standard message for trap errors
  Script failed at line: $line and ${LINENO}
  From commands: $cmd AND/OR $BASH_COMMAND
  Script path: ${BASH_SOURCE[0]##*/} > ${BASH_SOURCE[1]##*/}"
-	move_line_up; move_line_up; move_line_up; move_line_up;			# I am doing this because I want to log the error, but not show it in that format
+	move_line_up 4; 					# I am doing this because I want to log the error, but not show it in that format
 	printf '%s' "${ERROR}"
 	printf '    ❌ Script failed at line: %s and %s\n' "$line" "${LINENO}"
 	printf '    ❌ From commands: \n'

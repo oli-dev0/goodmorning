@@ -2,11 +2,11 @@
 
 # CONFIG
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs						# add lib names here
-	set_title "🌤️  CRYPTO 🌤️"		# Adjust title
-	required_commands		 		# checks for required commands
+	load_libs
+	set_title "🌤️  CRYPTO 🌤️"
+	required_commands
+	clearscreen 					# this is to show the title on startup
 
-clearscreen
 echo -e " this is a work in progress"
 echo " closing in 2 sec..."
 sleep 3

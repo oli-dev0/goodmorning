@@ -11,7 +11,7 @@ required_commands bc
 	anim_moving_on()
 	{
 	  hide_keyboard
-	  animation_spinner " Moving on " 0.5 "${WARNING}"
+	  animation_spinner "Moving on " 0.5 "${WARNING}"
 
 	  show_keyboard
 	  flushread
@@ -42,7 +42,7 @@ required_commands bc
 	
 	# SPIN SETTINGS
   	local spin='|/—\'
-  	local spin_speed=0.05
+  	local spin_speed=0.035
 
 	local iterations=$(( $(echo "$duration / $spin_speed" | bc) ))
 	local i=0
@@ -51,7 +51,7 @@ required_commands bc
 	printf "%s" "$color"
 
 	for (( i=0; i<iterations; i++ )); do
-	  printf "\r%s %s" "$msg" "${spin:i%4:1}   "
+	  printf "\r %s %s" "$msg" "${spin:i%4:1}   "
 	  sleep "$spin_speed"
 	done
 	
