@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#	= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
 #																					#
 #	BACKUP SCRIPT																	#
 #	-------------																	#
@@ -21,7 +21,7 @@
 #	- Includes hidden files (dotfiles)												#
 #	- ERR trap catches any failure and reports the line and command that failed	 	#
 #																					#
-#	= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
 
 # CONFIG
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"

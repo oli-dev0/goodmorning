@@ -37,7 +37,7 @@ http_get()			   # call the users configured client
 	fi
 	
   case "$http_client" in
-	curl)  curl -A curl -s "$@" ;;
+	curl)  curl -A curl -s --max-time 10 --connect-timeout 5 "$@" ;;
 	wget)  wget -qO- "$@" ;;
 	httpie) http --body --check-status GET "$@" ;;
 	fetch) fetch -q "$@" ;;
@@ -255,4 +255,9 @@ clearscreen()
 {
 	clear
 	[[ -n "$GM_CURRENT_TITLE" ]] && echo -e "\n   ${TITLE} $GM_CURRENT_TITLE  ${RESET}\n "
+}
+
+url_encode()
+{
+	jq -rn --arg loc "$1" '$loc|@uri'
 }

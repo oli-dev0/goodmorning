@@ -35,7 +35,9 @@
 	)
 
 # WEATHER
-	# nothing to configure for weather module
+	GM_WEATHER_API_URL="https://wttr.in/"
+	GM_WEATHER_FORMAT="?format=j2"
+
 
 # LOCAL BACKUP - THESE FOLDERS MAY NOT BE THE SAME
 	GM_BACKUP_SOURCE="$HOME/Coding"				# what to backup

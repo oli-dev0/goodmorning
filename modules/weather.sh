@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Version 1.0
 
-#	= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
 #																					#
 #	WEATHER SCRIPT																	#
 #	--------------																	#
@@ -13,7 +13,9 @@
 #																					#
 #	Example:																		#
 #	 ./weather.sh Tokyo																#
-#	 ./weather.sh "New York"														#
+#	 ./weather.sh "Eiffel Tower"													#
+#	 ./weather.sh "amsterdam, the netherlands"										#
+#	 ./weather.sh "São Paulo"														#
 #																					#
 #	- Location can be passed as argument, or entered when prompted					#
 #	- Leaving location empty uses your current location								#
@@ -31,7 +33,7 @@
 #	- Handles unknown locations and empty responses with clear error messages		#
 #	- ERR trap catches any failure and reports the line and command that failed		#
 #																					#
-#	= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =	#
 
 
 # CONFIG
@@ -41,8 +43,7 @@
 	required_commands jq bc
 	clearscreen 	# this is to show the title on startup
 
-
-weather_jsoncheck()
+weather_verify_json()
 {
 	local json="$1"
 
@@ -55,55 +56,112 @@ weather_jsoncheck()
 	# VALIDATE JSON STRUCTURE
 		jq empty <<< "$json" 2>/dev/null || { clearscreen; log_error "invalid JSON file"; return 1; }
 	
-	# CHECK IF KNOWN FIELD EXISTS INSIDE JSON
-		jq -e '.current_condition[0]' <<< "$json" >/dev/null 2>&1 || { clearscreen; log_error "missing weather data"; return 1; }
+	# CHECK IF REQUIRED FIELDS EXIST INSIDE JSON
+	jq -e '
+	[
+		.current_condition[0].temp_C,
+		.current_condition[0].FeelsLikeC,
+		.current_condition[0].humidity,
+		.current_condition[0].observation_time,
+		.current_condition[0].weatherDesc[0].value,
+		.current_condition[0].windspeedKmph,
+		.current_condition[0].precipMM,
+		.nearest_area[0].areaName[0].value,
+		.nearest_area[0].country[0].value,
+		.weather[0].astronomy[0].sunrise,
+		.weather[0].astronomy[0].sunset,
+		.weather[0].avgtempC,
+		.weather[0].maxtempC,
+		.weather[0].sunHour,
+		.weather[0].totalSnow_cm
+	] | all(. != null)
+	' <<< "$json" >/dev/null 2>&1 || { clearscreen; log_error "missing weather data in json"; return 1; }
 
 	return 0
 }
 
-weather_getinfo()
+weather_parse_json()
+{
+	local json="$1"
+	local location="${2:-}"
+
+	unset weather					# reset weather variable
+	declare -gA weather
+	local weather_data
+	local temp feels humidity time desc wind rain city country sunrise sunset avgtemp maxtemp sunhr snow
+
+	weather_data="$(jq -r '
+		[	
+			.current_condition[0].temp_C // "",
+			.current_condition[0].FeelsLikeC // "",
+			.current_condition[0].humidity // "",
+			.current_condition[0].observation_time // "",
+			(.current_condition[0].weatherDesc[0].value // "" | sub("\\s+$"; "")),
+			.current_condition[0].windspeedKmph // "",
+			.current_condition[0].precipMM // "",
+			.nearest_area[0].areaName[0].value // "",
+			.nearest_area[0].country[0].value // "",
+			.weather[0].astronomy[0].sunrise // "",
+			.weather[0].astronomy[0].sunset // "",
+			.weather[0].avgtempC // "",
+			.weather[0].maxtempC // "",
+			.weather[0].sunHour // "",
+			.weather[0].totalSnow_cm // ""
+		] | join("|")
+		' <<< "$json"
+		)" || { log_error "weather - failed to parse JSON"; return 1; }
+
+	IFS='|' read -r temp feels humidity time desc wind rain city country sunrise sunset avgtemp maxtemp sunhr snow <<< "$weather_data"
+
+	weather[temp]="$temp"
+	weather[feels]="$feels"
+	weather[humidity]="$humidity"
+	weather[time]="$time"
+	weather[desc]="$desc"
+	weather[wind]="$wind"
+	weather[rain]="$rain"
+	weather[city]="$city"
+	weather[country]="$country"
+	weather[sunrise]="$sunrise"
+	weather[sunset]="$sunset"
+	weather[avgtemp]="$avgtemp"
+	weather[maxtemp]="$maxtemp"
+	weather[sunhr]="$sunhr"
+	weather[snow]="$snow"
+	weather[emoji]="$(http_get "${GM_WEATHER_API_URL}${location}?format=%c" 2>/dev/null || printf '🌍')"
+}
+
+weather_fetch()
 {
 	local location
-	local weatherJson
+	local weather_json
 
 # GET LOCATION, USE ARGUMENT IF GIVEN
-# 	if arg is not empty > use arg		else read location
+	# if arg is not empty > use arg		else read location
 	[[ -n "$1" ]] && location="$1" || read -r -p " Enter location: " location
-	location="${location// /%20}"		# replace spaces with %20 for http request
+	location="$(url_encode "$location")"
+
+# CHECK IF ONLINE
+	printf ' '
+	log_start "weather - starting fetch"; move_line_up
+	check_internet
+	clearscreen
 
 # FETCH ANIMATION
-	log_start "weather - starting fetch"; clearscreen
 	anim_status_bar "Fetching weather data..."; clearscreen
 
 # FETCH JSON
-	check_internet || return 1											# check if online
 	# real curl > show error if no http_get client installed
-	weatherJson="$(http_get "https://wttr.in/${location}?format=j2")" || { log_error "weather - http_get"; move_line_up 3; exit 1; }
-	# weatherJson=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
+	weather_json="$(http_get "${GM_WEATHER_API_URL}${location}${GM_WEATHER_FORMAT}")" || { log_error "weather - http_get"; move_line_up 3; exit 1; }
+	# weather_json=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 
 # CHECK JSON STRUCTURE
 	log_start "weather - starting json check"; clearscreen
-	weather_jsoncheck "$weatherJson" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
+	weather_verify_json "$weather_json" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
-# DECLARE WEATHER VARIABLES FROM JSON
-	unset weather					# reset weather variable
-	declare -gA weather
-	weather[temp]="$(jq -r '.current_condition[0].temp_C' <<< "$weatherJson")"
-	weather[feels]="$(jq -r '.current_condition[0].FeelsLikeC' <<< "$weatherJson")"
-	weather[humidity]="$(jq -r '.current_condition[0].humidity' <<< "$weatherJson")"
-	weather[time]="$(jq -r '.current_condition[0].observation_time' <<< "$weatherJson")"
-	weather[desc]="$(jq -r '.current_condition[0].weatherDesc[0].value | sub("\\s+$"; "")' <<< "$weatherJson")"
-	weather[wind]="$(jq -r '.current_condition[0].windspeedKmph' <<< "$weatherJson")"
-	weather[rain]="$(jq -r '.current_condition[0].precipMM' <<< "$weatherJson")"
-	weather[city]="$(jq -r '.nearest_area[0].areaName[0].value' <<< "$weatherJson")"
-	weather[sunrise]="$(jq -r '.weather[0].astronomy[0].sunrise' <<< "$weatherJson")"
-	weather[sunset]="$(jq -r '.weather[0].astronomy[0].sunset' <<< "$weatherJson")"
-	weather[avgtemp]="$(jq -r '.weather[0].avgtempC' <<< "$weatherJson")"
-	weather[maxtemp]="$(jq -r '.weather[0].maxtempC' <<< "$weatherJson")"
-	weather[sunhr]="$(jq -r '.weather[0].sunHour' <<< "$weatherJson")"
-	weather[snow]="$(jq -r '.weather[0].totalSnow_cm' <<< "$weatherJson")"
-	weather[emoji]="$(http_get "https://wttr.in/${location// /%20}?format=%c")"
+#  PARSE WEATHER VARIABLES FROM JSON
+	weather_parse_json "$weather_json" "$location"
 }
 
 weather_warnings()
@@ -131,11 +189,11 @@ weather_warnings()
 	printf '\n 🌨  %sWARNING - HAIL EXPECTED%s 🌨\n' "${SNOW}" "${RESET}"
 }
 
-weather_showinfo()
+weather_display()
 {
 	clearscreen
-	printf '%s\n' " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}${RESET}"
-	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - ${RESET}"
+	printf '%s\n' " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}, ${weather[country]}${RESET}"
+	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - - - ${RESET}"
 	printf '%s\n' " 🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C (feels ${weather[feels]}°C)"
 	printf '%s\n' " 📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
 	printf '%s\n' " 💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
@@ -145,20 +203,19 @@ weather_showinfo()
 	printf '%s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
 }
 
-get_weather()
+weather_run()
 {
-	weather_getinfo "$1" || return
-	weather_showinfo
+	weather_fetch "$1" || return
+	weather_display
 }
 
-get_weather_ask()
+weather_loop()
 {
-	local answer
 	local running=true
 	
 	while $running; do
 		clearscreen
-		get_weather "${1:-}" || true
+		weather_run "${1:-}" || true
 		set --										# clears all arguments from ./weather.sh "arg"
 													# so that new loop can ask for location
 		if ! ask_yes_no "Another location?"; then 	# if answer no, move on and close loop by setting running to false
@@ -169,4 +226,4 @@ get_weather_ask()
 	done
 }
 
-get_weather_ask "${1:-}"
+weather_loop "${1:-}"
