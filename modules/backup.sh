@@ -86,7 +86,9 @@
 	
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M')"
+	readonly timestamp
 	tar_file="$backup_dest/$timestamp.tar.gz"
+	readonly tar_file
 
 # EXCLUSIONS
 	# fixed excludes, can be added with +=
@@ -116,7 +118,7 @@
 # GET FILE INFO
 	file_count=$(tar -tvzf "$tar_file" | awk '$1 ~ /^-/ { count++ } END { print count+0 }')
 	file_size=$(stat -c "%s" "$tar_file" | numfmt --to=iec)		# get size in bytes, convert to readable format
-	file_hidden=$(tar -tvzf "$tar_file" | awk '$1 ~ /^-/ && $0 ~ /(^|\/)\.[^\/]/ { count++ } END { print count+0 }')
+	file_hidden=$(tar -tzf "$tar_file" | awk '!/\/$/ && /(^|\/)\.[^\/]+/ { count++ } END { print count+0 }')
 
 # SUCCESS TEXT
 	log_success "backup - success"
