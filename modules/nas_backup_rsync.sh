@@ -50,7 +50,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 	"$GM_NAS_TARGET")"
 
 	move_line_up
-	printf ' '
+	printf '\n '
 	log_success "Backup sync complete"
 
 # GET INFO
@@ -97,3 +97,9 @@ log_start "nas rsync - start folder checks"; clearscreen
 	printf '%11s💿 Total size:%s      %s\n'      "${INFO}" "${RESET}" "$total_size"
 	printf '%11s🛜 Sent size:%s       %s\n\n'    "${INFO}" "${RESET}" "$transferred_size"
 	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files"
+
+	hide_keyboard
+	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline
+	show_keyboard
+	anim_moving_on
+	clear
