@@ -28,7 +28,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 # CHECK IF TARGET FOLDER EXISTS ON NAS
 	animation_spinner "Checking NAS connection... " 0.5 "${BOLD}"
-	if ! ssh nas 'test -d $NAS_PATH'; then
+	if ! ssh nas test -d "$GM_NAS_PATH"; then
 		printf ' '
 		log_error "NAS backup folder not found or NAS is unreachable"; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_NAS_PATH"
