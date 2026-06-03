@@ -8,6 +8,9 @@
 	clearscreen 							# this is to show the title on startup
 # ps: backup directories are set in config.sh
 
+# ASK
+	ask_first "Do you want to rsync your backups to your NAS?"
+
 log_start "nas rsync - start folder checks"; clearscreen
 
 # CHECK IF LOCAL BACKUP FOLDER EXISTS

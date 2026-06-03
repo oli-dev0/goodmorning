@@ -31,6 +31,10 @@
 	clearscreen 	# this is to show the title on startup
 # ps: backup directories are set in config.sh
 
+# ASK
+	ask_first "Do you want to make a backup?"
+	log_start "backup started"; clearscreen
+
 # CHECK IF SOURCE FOLDER EXISTS
 	[[ -d "$GM_BACKUP_SOURCE" ]] || { clearscreen; log_error "source directory does not exist '$GM_BACKUP_SOURCE'" >&2; exit 1; }
 
@@ -75,16 +79,8 @@
 		tar_excludes+=(--exclude="./${tar_file#"$backup_source"/}")	# exclude it
 	fi
 
-# ASK
-	if ! ask_yes_no "Do you want to make a backup?"; then
-		anim_moving_on
-		clear
-		exit 0
-	fi
-
 # PROGRESS ANIMATION
 	clearscreen
-	log_start "backup started"; clearscreen
 	anim_status_bar "Backup in progress...  "; sleep 0.5
 
 # MAKE BACKUP

@@ -191,6 +191,17 @@ ask_yes_no()
 	done
 }
 
+ask_first()
+{
+	local qs="${1:-Do you want to proceed?}"
+	
+	if ! ask_yes_no "$qs"; then
+		anim_moving_on
+		clear
+		exit 0
+	fi
+}
+
 log_start()
 {
 	local msg=${1:-Starting...}
