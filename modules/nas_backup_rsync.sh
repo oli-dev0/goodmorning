@@ -86,11 +86,11 @@ log_start "nas rsync - start folder checks"; clearscreen
 	[[ -z "$transferred_files" ]] && transferred_files="     --NONE--"
 
 # SHOW INFO
-	printf ' %s\n' "${BOLD}Backup sync summary: ${RESET}";
-	printf '%s  📁 Total files:%s     %s\n'      "${INFO}" "${RESET}" "$total_files"
-	printf '%s  🆕 Created files:%s   %s\n'      "${INFO}" "${RESET}" "$created_files"
-	printf '%s  🗑️  Deleted files:%s   %s\n'     "${INFO}" "${RESET}" "$deleted_files"
-	printf '%s  📤 Sent files:%s      %s\n'      "${INFO}" "${RESET}" "$transferred_files_count"
-	printf '%s  💿 Total size:%s      %s\n'      "${INFO}" "${RESET}" "$total_size"
-	printf '%s  🛜 Sent size:%s       %s\n\n'    "${INFO}" "${RESET}" "$transferred_size"
-	printf '%s  📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files"
+	printf '%6sℹ️  Backup sync summary: %s\n'    "${BOLD}" "${RESET}"
+	printf '%11s📁 Total files:%s     %s\n'      "${INFO}" "${RESET}" "$total_files"
+	printf '%11s🆕 Created files:%s   %s\n'      "${INFO}" "${RESET}" "$created_files"
+	printf '%11s🗑️  Deleted files:%s   %s\n'     "${INFO}" "${RESET}" "$deleted_files"
+	printf '%11s📤 Sent files:%s      %s\n'      "${INFO}" "${RESET}" "$transferred_files_count"
+	printf '%11s💿 Total size:%s      %s\n'      "${INFO}" "${RESET}" "$total_size"
+	printf '%11s🛜 Sent size:%s       %s\n\n'    "${INFO}" "${RESET}" "$transferred_size"
+	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files"
