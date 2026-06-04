@@ -121,11 +121,11 @@ log_start "nas rsync - start folder checks"; clearscreen
 		/^sent / { exit }
 		/^Number of files:/ { exit }
 		NF && !/\/$/ && !/^sending incremental file list$/ {
-		print "     " $0
+		print "       " $0
 		}
 		' <<< "$rsync_output")"
 
-	[[ -z "$transferred_files_list" ]] && transferred_files_list="     --NONE--"
+	[[ -z "$transferred_files_list" ]] && transferred_files_list="       --NONE--"
 
 # SHOW INFO
 	printf '%6sℹ️  Backup sync summary: %s\n'    "${BOLD}" "${RESET}"
