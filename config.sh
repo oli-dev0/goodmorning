@@ -31,7 +31,7 @@
 		"weather|weather|w|🌤️  Weather"
 		"crypto|crypto|cryp|c|🪙  Crypto"
 		"backup|backup|back|bak|b|💾 Backup"
-		"nas_backup_rsync|rs|☁️  Sync backups to NAS"
+		"nas_backup_rsync|rs|r|☁️  Sync backups to NAS"
 	)
 
 # WEATHER
