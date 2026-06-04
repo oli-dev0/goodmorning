@@ -254,10 +254,10 @@ set_title()
 clearscreen()
 {
 	clear
-	[[ -n "$GM_CURRENT_TITLE" ]] && echo -e "\n   ${TITLE} $GM_CURRENT_TITLE  ${RESET}\n "
+	[[ -n "$GM_CURRENT_TITLE" ]] && printf '\n   %s %s  %s\n\n' "${TITLE}" "$GM_CURRENT_TITLE" "${RESET}"
 }
 
 url_encode()
 {
-	jq -rn --arg loc "$1" '$loc|@uri'
+	jq -rn --arg jqvar "$1" '$jqvar|@uri'
 }

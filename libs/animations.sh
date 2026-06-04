@@ -37,8 +37,8 @@ required_commands bc
   {
 	# ARGUMENTS
   	local msg="${1:- Processing...}"
-  	local duration="${2:-1}"
-  	local color="${3:-${WARNING}}"
+  	local duration="${2:-0.5}"
+  	local color="${3:-${BOLD}}"
 	
 	# SPIN SETTINGS
   	local spin='|/—\'

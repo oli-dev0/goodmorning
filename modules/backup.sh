@@ -36,15 +36,13 @@
 	log_start "backup - folders check started"; clearscreen
 
 # CHECK IF SOURCE FOLDER EXISTS
-	animation_spinner "Checking source folder... " 0.5 "${BOLD}"
+	animation_spinner "Checking source folder... "
 	if [[ ! -d "$GM_BACKUP_SOURCE" ]]; then
-		printf ' '
 		log_error "source directory does not exist" >&2; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_BACKUP_SOURCE"
 		exit 1
 	else
 		move_line_up
-		printf ' '
 		log_success "Source folder exists"; move_line_up
 	fi
 
@@ -52,15 +50,13 @@
 	mkdir -p "$GM_BACKUP_DEST" 2>/dev/null || { clearscreen; log_error "cannot create backup folder '$GM_BACKUP_DEST' - check path or permission" >&2; exit 1; }
 
 # CHECK IF BACKUP FOLDER EXISTS
-	animation_spinner "Checking backup folder... " 0.5 "${BOLD}"
+	animation_spinner "Checking backup folder... "
 	if [[ ! -d "$GM_BACKUP_DEST" ]]; then
-		printf ' '
 		log_error "destination directory does not exist" >&2; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_BACKUP_DEST"
 		exit 1
 	else
 		move_line_up
-		printf ' '
 		log_success "Backup folder exists"; move_line_up
 	fi
 
@@ -71,16 +67,14 @@
 	# backup_dest="hello"
 
 # CHECK IF SOURCE AND BACKUP FOLDER ARE THE SAME
-	animation_spinner "Checking if folders are the same... " 0.5 "${BOLD}"
+	animation_spinner "Checking if folders are the same... "
 	if [[ "$backup_source" == "$backup_dest" ]]; then
-		printf ' '
 		log_error "backup source and destination cannot be the same directory" >&2; move_line_up
 		printf '        📂 %sSource:%s %s\n' "${BOLD}" "${RESET}" "'$backup_source'"
 		printf '   📂 %sDestination:%s %s\n\n' "${BOLD}" "${RESET}" "'$backup_dest'"
 		exit 1
 	else
 		move_line_up
-		printf ' '
 		log_success "All folders valid";
 	fi
 	

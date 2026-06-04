@@ -142,7 +142,6 @@ weather_fetch()
 	location="$(url_encode "$location")"
 
 # CHECK IF ONLINE
-	printf ' '
 	log_start "weather - starting fetch"; move_line_up
 	check_internet
 	clearscreen
