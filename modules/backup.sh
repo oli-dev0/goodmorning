@@ -127,8 +127,4 @@
 	printf '%s' "${INFO}   📄 Files:${RESET}	$file_count (${file_hidden} hidden) "
 	printf '\n%s\t%s\n\n' "${INFO}   💾 Size:${RESET}" "$file_size"
 	
-	hide_keyboard
-	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline
-	show_keyboard
-	anim_moving_on
-	clear
+	press_any_key

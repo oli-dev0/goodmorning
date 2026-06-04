@@ -136,8 +136,4 @@ log_start "nas rsync - start folder checks"; clearscreen
 	printf '%11s🛜 Sent size:%s       %s\n\n'    "${INFO}" "${RESET}" "$transferred_size"
 	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files_list"
 
-	hide_keyboard
-	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline
-	show_keyboard
-	anim_moving_on
-	clear
+	press_any_key

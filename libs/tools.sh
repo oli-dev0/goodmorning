@@ -202,6 +202,15 @@ ask_first()
 	fi
 }
 
+press_any_key()
+{
+	hide_keyboard
+	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline
+	show_keyboard
+	anim_moving_on
+	clear
+}
+
 log_start()
 {
 	local msg=${1:-Starting...}
