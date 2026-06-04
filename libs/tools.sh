@@ -258,6 +258,7 @@ trap_error()			# standard message for trap errors
 set_title()
 {
 	GM_CURRENT_TITLE="$1"
+	clearscreen
 }
 
 clearscreen()

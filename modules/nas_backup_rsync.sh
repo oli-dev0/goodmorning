@@ -44,7 +44,6 @@
 	load_libs animations					# add lib names here
 	set_title "☁️  NAS BACKUP SYNC ☁️"		# Adjust title
 	required_commands ssh rsync 			# checks for required commands
-	clearscreen 							# this is to show the title on startup
 # ps: backup directories are set in config.sh
 
 # ASK

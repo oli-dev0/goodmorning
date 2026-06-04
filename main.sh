@@ -116,6 +116,5 @@ ask()
 	done
 }
 
-clearscreen
 ask_begin || exit 0
 ask

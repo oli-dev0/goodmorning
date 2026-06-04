@@ -28,7 +28,6 @@
 	load_libs animations
 	set_title "💾 BACKUP 💾"
 	required_commands tar stat numfmt
-	clearscreen 	# this is to show the title on startup
 # ps: backup directories are set in config.sh
 
 # ASK
