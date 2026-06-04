@@ -44,9 +44,10 @@
 	GM_BACKUP_DEST="$HOME/Coding/backups"		# where to backup (this folder is excluded from being backed up)
 
 # NAS BACKUP RSYNC
-	GM_LOCAL_BACKUP_DIR="$GM_BACKUP_DEST/"				# what folder to sync with your NAS
-	GM_NAS_TARGET="nas:/volume1/Data/Backups/Coding/"	# where to sync on your NAS
-	GM_NAS_PATH="${GM_NAS_TARGET#nas:}"					# need path for script
+	GM_NAS_HOST="nas"
+	GM_LOCAL_BACKUP_DIR="$GM_BACKUP_DEST/"						# what folder to sync with your NAS
+	GM_NAS_TARGET="$GM_NAS_HOST:/volume1/Data/Backups/Coding/"	# where to sync on your NAS
+	GM_NAS_PATH="${GM_NAS_TARGET#"$GM_NAS_HOST":}"				# need path for script
 
 # CRYPTO
 	# API TO CALL

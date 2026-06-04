@@ -1,10 +1,49 @@
 #!/usr/bin/env bash
 
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
+#																					#
+#	NAS BACKUP SYNC																	#
+#	---------------																	#
+#	Purpose:																		#
+#	- Synchronizes local backup archives to a NAS using rsync over SSH				#
+#	- Transfers only files that do not already exist on the NAS					 	#
+# 																					#
+#	Usage:																			#
+#	./nas_backup_rsync.sh															#
+#																					#
+#	Configuration:																	#
+#	- Backup and NAS settings are configured in config.sh							#
+#	- Required settings include:													#
+#	  GM_LOCAL_BACKUP_DIR	Local backup directory									#
+#	  		  GM_NAS_HOST 	SSH host or alias										#
+#			  GM_NAS_PATH	Destination directory on NAS							#
+#	  		GM_NAS_TARGET 	Full rsync target										#
+#																					#
+#	Validation:																		#
+#	- Verifies the local backup directory exists									#
+#	- Verifies the NAS is reachable over SSH										#
+#	- Verifies the target directory exists on the NAS								#
+#	- Aborts immediately if any validation fails									#
+#																					#
+#	Synchronization:																#
+#	- Uses rsync with archive mode (-a) and human-readable output (-h)				#
+#	- Uses --ignore-existing to prevent overwriting existing backups				#
+#	- Uses --stats to collect synchronization statistics							#
+#	- Captures and formats rsync output for a clean summary							#
+#																					#
+#	Notes:																			#
+#	- Existing backup archives on the NAS are preserved								#
+#	- Temporary rsync logs are removed after execution								#
+#	- Intended as the second stage of the backup workflow:							#
+#		Local Backup  ->  NAS Synchronization										#
+#																					#
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
+
 # CONFIG
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
 	load_libs animations					# add lib names here
 	set_title "☁️  NAS BACKUP SYNC ☁️"		# Adjust title
-	required_commands 		 				# checks for required commands
+	required_commands ssh rsync 			# checks for required commands
 	clearscreen 							# this is to show the title on startup
 # ps: backup directories are set in config.sh
 
@@ -28,7 +67,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 # CHECK IF TARGET FOLDER EXISTS ON NAS
 	animation_spinner "Checking NAS connection... " 0.5 "${BOLD}"
-	if ! ssh nas test -d "$GM_NAS_PATH"; then
+	if ! ssh -o BatchMode=yes -o ConnectTimeout=5 "$GM_NAS_HOST" test -d "$GM_NAS_PATH"; then
 		printf ' '
 		log_error "NAS backup folder not found or NAS is unreachable"; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_NAS_PATH"
@@ -44,16 +83,32 @@ log_start "nas rsync - start folder checks"; clearscreen
 	animation_spinner "Syncing backups to NAS... " 1.5 "${BOLD}"
 
 	# putting output in a variable to format later
-	rsync_output="$(
-	rsync -avh --ignore-existing --stats \
+	rsync_log="$(mktemp)" || { log_error "cannot create temporary rsync log"; exit 1; }
+
+	if ! rsync -avh --ignore-existing --stats \
 	"$GM_LOCAL_BACKUP_DIR" \
-	"$GM_NAS_TARGET")"
+	"$GM_NAS_TARGET" \
+	> "$rsync_log"; then
+		rm -f "$rsync_log"
+		log_error "rsync failed"
+		exit 1
+	fi
+
+	rsync_output="$(< "$rsync_log")"
+	rm -f "$rsync_log"
 
 	move_line_up
 	printf '\n '
 	log_success "Backup sync complete"
 
 # GET INFO
+	# defaults in case rsync stats output changes
+	total_files="--"
+	created_files="--"
+	transferred_files_count="--"
+	total_size="--"
+	transferred_size="--"
+
 	# rsync stats
 	while IFS= read -r line; do
 		case "$line" in
@@ -62,9 +117,6 @@ log_start "nas rsync - start folder checks"; clearscreen
 				;;
 			"Number of created files:"*)
 				created_files="${line#Number of created files: }"
-				;;
-			"Number of deleted files:"*)
-				deleted_files="${line#Number of deleted files: }"
 				;;
 			"Number of regular files transferred:"*)
 				transferred_files_count="${line#Number of regular files transferred: }"
@@ -79,24 +131,24 @@ log_start "nas rsync - start folder checks"; clearscreen
 	done <<< "$rsync_output"
 
 	# rsync actual sent files
-	transferred_files="$(echo "$rsync_output" | awk '
+	transferred_files_list="$(awk '
 		/^sent / { exit }
 		/^Number of files:/ { exit }
 		NF && !/\/$/ && !/^sending incremental file list$/ {
 		print "     " $0
 		}
-	')"
-	[[ -z "$transferred_files" ]] && transferred_files="     --NONE--"
+		' <<< "$rsync_output")"
+
+	[[ -z "$transferred_files_list" ]] && transferred_files_list="     --NONE--"
 
 # SHOW INFO
 	printf '%6sℹ️  Backup sync summary: %s\n'    "${BOLD}" "${RESET}"
 	printf '%11s📁 Total files:%s     %s\n'      "${INFO}" "${RESET}" "$total_files"
 	printf '%11s🆕 Created files:%s   %s\n'      "${INFO}" "${RESET}" "$created_files"
-	printf '%11s🗑️  Deleted files:%s   %s\n'     "${INFO}" "${RESET}" "$deleted_files"
 	printf '%11s📤 Sent files:%s      %s\n'      "${INFO}" "${RESET}" "$transferred_files_count"
 	printf '%11s💿 Total size:%s      %s\n'      "${INFO}" "${RESET}" "$total_size"
 	printf '%11s🛜 Sent size:%s       %s\n\n'    "${INFO}" "${RESET}" "$transferred_size"
-	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files"
+	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files_list"
 
 	hide_keyboard
 	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline

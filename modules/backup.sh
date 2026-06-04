@@ -5,15 +5,15 @@
 #	BACKUP SCRIPT																	#
 #	-------------																	#
 #	Purpose:																		#
-#	- Creates a compressed .tar.gz backup of the source directory				 	#
+#	- Creates a compressed .tar.gz backup of the source directory					#
 #																					#
 #	Usage:																			#
 #	 ./backup.sh																	#
 #																					#
 #	- Configure the directories in config.sh										#
-#	- The backup folder itself is excluded from the archive						 	#
+#	- The backup folder itself is excluded from the archive							#
 #																					#
-#	Output:																		 	#
+#	Output:																			#
 #	- Timestamp, file count, archive size, and hidden file count					#
 #																					#
 #	Notes:																			#
