@@ -141,8 +141,8 @@ weather_fetch()
 	location="$(url_encode "$location")"
 
 # CHECK IF ONLINE
-	log_start "weather - starting fetch"; move_line_up
-	check_internet
+	log_start "weather - starting fetch"; move_line_up 2
+	check_internet || exit 1
 	clearscreen
 
 # FETCH ANIMATION
@@ -155,7 +155,7 @@ weather_fetch()
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 
 # CHECK JSON STRUCTURE
-	log_start "weather - starting json check"; clearscreen
+	log_start "weather - starting json check"; move_line_up 2
 	weather_verify_json "$weather_json" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
 #  PARSE WEATHER VARIABLES FROM JSON
