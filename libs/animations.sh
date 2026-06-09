@@ -45,7 +45,7 @@ required_commands bc
   	local spin_speed=0.035
 
 	local iterations=$(( $(echo "$duration / $spin_speed" | bc) ))
-	local i=0
+	local i
 
 	hide_keyboard
 	printf "%s" "$color"
@@ -68,12 +68,13 @@ required_commands bc
   	local msg="${1:- Default text....}"
   	local delay="${2:-0.025}"
   	local color="${3:-${BOLD}}"
+  	local i
 
   	hide_keyboard
   	printf "%s" "$color"
 
-  	for ((i=1; i<=${#msg}; i++)); do
-  	  printf "%s" "${msg:i-1:1}"
+  	for ((i=0; i<=${#msg}; i++)); do
+  	  printf "%s" "${msg:i:1}"
   	  sleep "$delay"
   	done
 
@@ -89,6 +90,7 @@ required_commands bc
   	local msg="${1:-Continue in}"
   	local seconds="${2:-3}"
   	local color="${3:-}"
+  	local i
 
   	hide_keyboard
   	printf "%s" "$color"
