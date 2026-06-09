@@ -52,7 +52,7 @@ check_internet()
 	# TCP connection to Google DNS (port 53) instead of ping
 	# VPNs commonly block ICMP packets, making ping unreliable
 	# TCP handshake achieves the same connectivity check without ICMP and MUCH faster than a curl
-  bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; exit 1; }
+  timeout 3 bash -c 'echo > /dev/tcp/8.8.8.8/53' 2>/dev/null || { clearscreen; log_error "no active internet connection" >&2; return 1; }
 }
 
 load_libs()
