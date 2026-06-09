@@ -41,7 +41,6 @@
 	load_libs animations math
 	set_title "🌤️  WEATHER 🌤️"
 	required_commands jq bc
-	clearscreen 	# this is to show the title on startup
 
 weather_verify_json()
 {
@@ -117,7 +116,7 @@ weather_parse_json()
 	weather[feels]="$feels"
 	weather[humidity]="$humidity"
 	weather[time]="$time"
-	weather[desc]="$desc"
+	weather[desc]="${desc// nearby/}"
 	weather[wind]="$wind"
 	weather[rain]="$rain"
 	weather[city]="$city"
@@ -169,37 +168,38 @@ weather_warnings()
 
 # RAIN
 	(is_positive "${weather[rain]}" || [[ "$desc" == *rain* ]]) &&
-	printf '\n 🌧️  %sWARNING - RAIN EXPECTED - %smm%s 🌧️\n' "${RAIN}" "${weather[rain]}" "${RESET}"
+	printf '    🌧️  %sWARNING - RAIN EXPECTED - %smm%s 🌧️|\n\n' "${RAIN}" "${weather[rain]}" "${RESET}"
 
 # SNOW
 	(is_positive "${weather[snow]}" || [[ "$desc" == *snow* ]]) &&
-	printf '\n 🌨️  %sWARNING - SNOW EXPECTED - %scm%s 🌨️\n' "${SNOW}" "${weather[snow]}" "${RESET}"
+	printf '    🌨️  %sWARNING - SNOW EXPECTED - %scm%s 🌨️\n\n' "${SNOW}" "${weather[snow]}" "${RESET}"
 
 # STORM
 	[[ "$desc" == *storm* ]] && 
-	printf '\n ⛈️  %sWARNING - STORM EXPECTED%s ⛈️\n' "${STORM}" "${RESET}"
+	printf '    ⛈️  %sWARNING - STORM EXPECTED%s ⛈️\n\n' "${STORM}" "${RESET}"
 
 # THUNDER
 	[[ "$desc" == *thunder* ]] && 
-	printf '\n ⚡ %sWARNING - THUNDER EXPECTED%s ⚡\n' "${THUNDER}" "${RESET}"
+	printf '    ⚡ %sWARNING - THUNDER EXPECTED%s ⚡\n\n' "${THUNDER}" "${RESET}"
 
 # HAIL
 	[[ "$desc" == *hail* ]] && 
-	printf '\n 🌨  %sWARNING - HAIL EXPECTED%s 🌨\n' "${SNOW}" "${RESET}"
+	printf '    🌨  %sWARNING - HAIL EXPECTED%s 🌨\n\n' "${SNOW}" "${RESET}"
 }
 
 weather_display()
 {
 	clearscreen
 	printf '%s\n' " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}, ${weather[country]}${RESET}"
-	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - - - ${RESET}"
-	printf '%s\n' " 🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C (feels ${weather[feels]}°C)"
-	printf '%s\n' " 📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
-	printf '%s\n' " 💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
-	printf '%s\n' " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
+	printf '|%s \n' "${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
+	printf '|%s  \n' "      🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C | 🥵 Feels like: ${weather[feels]}°C"
+	printf '|%s        \n' "         📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
+	printf '|%s       \n' "     💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
+	printf '|%s  \n' " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
+	printf '|%s \n' "${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
+	printf ' %s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
 	weather_warnings					# show weather warnings
-	printf '%s\n' " ${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
-	printf '%s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
+
 }
 
 weather_run()
