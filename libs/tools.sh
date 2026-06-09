@@ -161,9 +161,7 @@ run_module()
 	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
 	bash "$module_path" || exit_code=$?		# get exit code of previous command 'bash'
-	GM_CURRENT_TITLE="$saved_title"				# set title back to previous title
-	clearscreen														# clear but keep title
-
+	set_title "$saved_title"							# set both titles back to previous title
 	return "$exit_code"										# return exit code from bash command or 0
 }
 
@@ -258,6 +256,7 @@ trap_error()			# standard message for trap errors
 set_title()
 {
 	GM_CURRENT_TITLE="$1"
+	printf '\033]0;%s\007' "$GM_CURRENT_TITLE"
 	clearscreen
 }
 
