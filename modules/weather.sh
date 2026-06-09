@@ -191,13 +191,13 @@ weather_display()
 {
 	clearscreen
 	printf '%s\n' " ${weather[emoji]} ${BOLD}${weather[desc]} ${RESET}in ${BOLD}${weather[city]}, ${weather[country]}${RESET}"
-	printf '|%s \n' "${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
-	printf '|%s  \n' "      🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C | 🥵 Feels like: ${weather[feels]}°C"
-	printf '|%s        \n' "         📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
-	printf '|%s       \n' "     💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
-	printf '|%s  \n' " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
-	printf '|%s \n' "${BOLD}- - - - - - - - - - - - - - - - - - - - - -${RESET}"
-	printf ' %s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
+	printf '%s \n' "${BOLD} - - - - - - - - - - - - - - - - - - - - - -${RESET}"
+	printf '%s  \n' "      🌡️ ${BOLD}Current: ${RESET}${weather[temp]}°C | 🥵 Feels like: ${weather[feels]}°C"
+	printf '%s        \n' "         📊 ${BOLD}Avg:${RESET} ${weather[avgtemp]}°C | 📈 ${BOLD}High:${RESET} ${weather[maxtemp]}°C"
+	printf '%s       \n' "     💧 ${BOLD}Humidity:${RESET} ${weather[humidity]}% | 💨 ${BOLD}Wind:${RESET} ${weather[wind]}kmh"
+	printf '%s  \n' " 🌄 ${BOLD}Sunrise:${RESET} ${weather[sunrise]} | 🌇 ${BOLD}Sunset:${RESET} ${weather[sunset]}"
+	printf '%s \n' "${BOLD} - - - - - - - - - - - - - - - - - - - - - -${RESET}"
+	printf '%s\n\n' " ℹ️  ${ITALIC}${DIM}Snapshot from ${weather[time]}${RESET}"
 	weather_warnings					# show weather warnings
 
 }
