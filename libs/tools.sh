@@ -47,7 +47,7 @@ http_get()			   # call the users configured client
 check_internet()
 {
 	# My VPN blocks ping, so this is a good way to simulate a broken internet without being broken
-  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; log_error "no active internet connection" >&2; exit 1; }
+  # ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1 || { clearscreen; log_error "no active internet connection" >&2; return 1; }
   
 	# TCP connection to Google DNS (port 53) instead of ping
 	# VPNs commonly block ICMP packets, making ping unreliable
