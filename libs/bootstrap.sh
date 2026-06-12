@@ -22,9 +22,16 @@ set -Eeuo pipefail
 		exit 1
 	}
 
-	trap 'minimal_trap_error ${LINENO} "$BASH_COMMAND"' ERR
-	trap 'stty echo icanon 2>/dev/null || true' EXIT TERM
-	trap 'stty echo icanon 2>/dev/null || true; clear; exit 130' INT
+	minimal_cleanup()
+	{
+		stty echo icanon 2>/dev/null || true
+		tput cnorm 2>/dev/null || true
+	}	
+
+	trap 'minimal_trap_error "$LINENO" "$BASH_COMMAND"' ERR
+	trap 'minimal_cleanup' EXIT 
+	trap 'minimal_cleanup; exit 143' TERM
+	trap 'minimal_cleanup; clear; exit 130' INT
 
 # LOAD CONFIG
 	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
@@ -33,7 +40,13 @@ set -Eeuo pipefail
 											# also good to load by default, need everywhere
 
 # ERROR HANDLING
-	trap 'show_keyboard; clear; exit 130' INT 			# need to show keyboard because some animations 
-	trap 'show_keyboard' EXIT TERM 						# sometimes can keep hide_keyboard active
-	trap 'trap_error ${LINENO} "$BASH_COMMAND"' ERR
+	cleanup()
+	{
+		show_keyboard 2>/dev/null || true
+		show_cursor 2>/dev/null || true
+	}
+	trap 'trap_error "$LINENO" "$BASH_COMMAND"' ERR
+	trap 'cleanup' EXIT 
+	trap 'cleanup; exit 143' TERM
+	trap 'cleanup; clear; exit 130' INT
 

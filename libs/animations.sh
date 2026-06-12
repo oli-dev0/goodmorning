@@ -11,7 +11,7 @@ required_commands bc
 	anim_moving_on()
 	{
 	  hide_keyboard
-	  animation_spinner "Moving on " 0.5 "${WARNING}"
+	  animation_spinner "Moving on " 0.5
 
 	  show_keyboard
 	  flushread
@@ -37,8 +37,8 @@ required_commands bc
   {
 	# ARGUMENTS
   	local msg="${1:- Processing...}"
-  	local duration="${2:-0.5}"
-  	local color="${3:-${BOLD}}"
+  	local duration="${2:-1}"
+  	local color="${3:-${WARNING}}"
 	
 	# SPIN SETTINGS
   	local spin='|/—\'
@@ -48,6 +48,7 @@ required_commands bc
 	local i
 
 	hide_keyboard
+	hide_cursor
 	printf "%s" "$color"
 
 	for (( i=0; i<iterations; i++ )); do
@@ -57,6 +58,7 @@ required_commands bc
 	
 	printf "%s" "${RESET}"  
 	show_keyboard
+	show_cursor
 	echo
 	flushread
   }

@@ -51,8 +51,10 @@ ask_begin ()	# start of module
 				;;
 			n|no|nop|nope)
 				clearscreen
+				hide_cursor
 				echo -ne " ${msg_gbye} "
 				sleep 1.5
+				show_cursor
 				clear
 				return 1
 				;;
@@ -93,8 +95,10 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 				;;
 			n|no|nop|nope)
 				clearscreen
+				hide_cursor
 				echo -ne " ${msg_gbye} "
 				sleep 1.5
+				show_cursor
 				clear
 				return 1
 				;;

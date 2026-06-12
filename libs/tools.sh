@@ -189,6 +189,23 @@ ask_yes_no()
 	done
 }
 
+ask_yes_no_dialog() 
+{
+	local question="${1:-Do you want to proceed? }"
+	local height="${2:-0}"
+	local width="${3:-0}"
+
+	hide_cursor
+
+	dialog --yesno "  $question" "$height" "$width"
+	local result=$?
+
+	clearscreen
+	show_cursor
+	
+	return "$result"
+}
+
 ask_first()
 {
 	local qs="${1:-Do you want to proceed?}"
@@ -269,4 +286,14 @@ clearscreen()
 url_encode()
 {
 	jq -rn --arg jqvar "$1" '$jqvar|@uri'
+}
+
+hide_cursor()
+{
+	tput civis
+}
+
+show_cursor()
+{
+	tput cnorm
 }
