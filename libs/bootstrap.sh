@@ -39,6 +39,7 @@ set -Eeuo pipefail
 	source "$GM_LIBS_DIR/logging.sh"
 	source "$GM_LIBS_DIR/core.sh"
 	load_libs styles terminal animations http input modules math
+	required_bash_version
 
 # ERROR HANDLING
 	cleanup()

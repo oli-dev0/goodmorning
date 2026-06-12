@@ -18,7 +18,7 @@
 
 	# GLOBAL
 		# INVALID INPUT
-		msg_invalid_input="Invalid input, please use [y/n]"
+		GM_MSG_INVALID_INPUT="Invalid input, please use [y/n]"
 
 # SET MODULES - every new module needs to be setup here
 	# module name must equal the script.sh name in modules folder

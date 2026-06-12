@@ -12,17 +12,26 @@ load_libs()
 	for lib in "$@"; do	source "$GM_LIBS_DIR/$lib.sh"; done
 }
 
+required_bash_version()
+{
+	if (( BASH_VERSINFO[0] < 4 )); then
+		echo
+		log_error "☀️  GoodMorning requires Bash 4+"
+		exit 1
+	fi
+}
+
 required_commands()
 {
-    local cmd
+	local cmd
 
-    for cmd in "$@"; do
-        command -v "$cmd" >/dev/null 2>&1 || {
-            echo
-            log_error "missing dependency: '$cmd' => please install '$cmd' to use this script."
-            exit 1
-        }
-    done
+	for cmd in "$@"; do
+		command -v "$cmd" >/dev/null 2>&1 || {
+		echo
+		log_error "missing dependency: '$cmd' => please install '$cmd' to use this script."
+		exit 1
+		}
+	done
 }
 
 trap_error()			# standard message for trap errors
