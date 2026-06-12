@@ -8,5 +8,9 @@
 	is_positive() {
 		local number="${1:-0}"
 
-		awk -v number="$number" 'BEGIN { exit !(number > 0) }'
-	}
+	if awk -v number="$number" 'BEGIN { exit !(number > 0) }'; then
+		return 0
+	fi
+
+	return 1
+}
