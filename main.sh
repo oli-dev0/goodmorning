@@ -17,9 +17,9 @@
 	}
 
 # EXTRA HIDDEN SHORTCUTS 			# checks if what user entered is a shortcut > these are set in config.sh
-	execute_shortcut()
-	{
-	local answer="$1"
+execute_shortcut()
+{
+	local answer="${1:-}"
 
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
@@ -72,8 +72,8 @@ ask_begin ()	# start of module
 
 ask_qs() 	# function to ask if user wants to run module
 {
-	local question="$1"		# set question from first argument
-	local module="$2"		# set module name from second argument
+	local question="${1:?question is required}"		# set question from first argument
+	local module="${2:?module is required}"			# set module name from second argument
 
 	if ask_yes_no "${question}?"; then
 		run_module "$module"

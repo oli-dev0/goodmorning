@@ -112,7 +112,7 @@ clearline()			 # goes to beginning and clears entired current line
   # GM_PARSED_MODULE_DESCRIPTION
   # GM_PARSED_MODULE_SHORTCUTS
 parse_module() {
-	local entry="$1"
+	local entry="${1:?missing module entry}"
 	local IFS='|'																					# sets | as delimiter, to split the module info in config.sh
 	local fields
 
@@ -159,7 +159,7 @@ validate_modules()
 
 run_module()
 {
-	local module="$1"
+	local module="${1:?missing module}"
 	local module_path="$GM_MODULES_DIR/$module.sh"
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
 	local exit_code=0
@@ -258,8 +258,8 @@ log_error()
 
 trap_error()			# standard message for trap errors
 {
-	local line="$1"
-	local cmd="$2"
+	local line="${1:-unknown}"
+	local cmd="${2:-unknown}"
 
 	log_error "Trap error
  Script failed at line: $line and ${LINENO}
@@ -278,7 +278,7 @@ trap_error()			# standard message for trap errors
 
 set_title()
 {
-	GM_CURRENT_TITLE="$1"
+	GM_CURRENT_TITLE="${1:?missing title}"
 	printf '\033]0;%s\007' "$GM_CURRENT_TITLE"
 	clearscreen
 }
@@ -291,7 +291,7 @@ clearscreen()
 
 url_encode()
 {
-	jq -rn --arg jqvar "$1" '$jqvar|@uri'
+	jq -rn --arg jqvar "${1:-}" '$jqvar|@uri'
 }
 
 hide_cursor()

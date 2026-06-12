@@ -4,7 +4,9 @@
 	[[ -n "${_MATH_LOADED:-}" ]] && return 0		# if var is not empty, then return (close the current "source" of lib)
 	_MATH_LOADED=1 									# if its empty, continue sourcing, and set var to 1
 
-# IS THIS NUMBER POSITIVE
+	# IS THIS NUMBER POSITIVE
 	is_positive() {
-		awk "BEGIN { exit !($1 > 0) }"
+		local number="${1:-0}"
+
+		awk -v number="$number" 'BEGIN { exit !(number > 0) }'
 	}

@@ -26,7 +26,7 @@ gui_close()
 
 gui_failed_module_error()
 {
-	local module="$1"
+	local module="${1:?missing module}"
 
 	hide_cursor
 	dialog --msgbox "  ❌ Error: module '${module}.sh' failed" 5 40 || true
@@ -35,7 +35,7 @@ gui_failed_module_error()
 
 gui_handle_dialog_exit_status()
 {
-	local status="$1"
+	local status="${1:?missing dialog status}"
 
 	case "$status" in
 		0)

@@ -44,10 +44,10 @@
 
 weather_verify_json()
 {
-	local json="$1"
+	local json="${1:-}"
 
 	# CHECK IF API RETURNED SOMETHING
-		[[ -z "$json" ]] && { clearscreen; log_error "empty response from weather API"; return 1; }
+		[[ -z "$json" ]] && { clearscreen; log_error "empty JSON file"; return 1; }
 
 	# CHECK IF LOCATION IS CORRECT
 		[[ "$json" == *"location not found"* ]] && { clearscreen; log_error "location not found"; return 1; }
@@ -81,8 +81,11 @@ weather_verify_json()
 
 weather_parse_json()
 {
-	local json="$1"
+	local json="${1:-}"
 	local location="${2:-}"
+
+	# check if json argument was provided
+	[[ -z "$json" ]] && { clearscreen; log_error "missing JSON argument"; return 1; }
 
 	unset weather					# reset weather variable
 	declare -gA weather
@@ -132,12 +135,11 @@ weather_parse_json()
 
 weather_fetch()
 {
-	local location
+	local location="${1:-}"
 	local weather_json
 
-# GET LOCATION, USE ARGUMENT IF GIVEN
-	# if arg is not empty > use arg		else read location
-	[[ -n "$1" ]] && location="$1" || read -r -p " Enter location: " location
+	# ask for location when no argument is given
+	[[ -z "$location" ]] && read -r -p " Enter location: " location
 	location="$(url_encode "$location")"
 
 # CHECK IF ONLINE
@@ -204,7 +206,7 @@ weather_display()
 
 weather_run()
 {
-	weather_fetch "$1" || return
+	weather_fetch "${1:-}" || return
 	weather_display
 }
 

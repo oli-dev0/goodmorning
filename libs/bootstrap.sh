@@ -14,8 +14,8 @@ set -Eeuo pipefail
 # MINIMAL ERROR HANDLING TO CATCH ISSUES IN config.sh
 	minimal_trap_error()
 	{
-		local line="$1"
-		local cmd="$2"
+		local line="${1:-unknown}"
+		local cmd="${2:-unknown}"
 
 		printf 'Error: script failed at line %s\n' "$line" >&2
 		printf 'Command: %s\n' "$cmd" >&2
@@ -50,4 +50,3 @@ set -Eeuo pipefail
 	trap 'cleanup' EXIT 
 	trap 'cleanup; exit 143' TERM
 	trap 'cleanup; clear; exit 130' INT
-
