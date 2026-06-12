@@ -169,7 +169,7 @@ weather_warnings()
 
 # RAIN
 	(is_positive "${weather[rain]}" || [[ "$desc" == *rain* ]]) &&
-	printf '    🌧️  %sWARNING - RAIN EXPECTED - %smm%s 🌧️|\n\n' "${RAIN}" "${weather[rain]}" "${RESET}"
+	printf '    🌧️  %sWARNING - RAIN EXPECTED - %smm%s 🌧️\n\n' "${RAIN}" "${weather[rain]}" "${RESET}"
 
 # SNOW
 	(is_positive "${weather[snow]}" || [[ "$desc" == *snow* ]]) &&
