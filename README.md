@@ -2,14 +2,15 @@
 
 **GoodMorning** is a modular Bash launcher for small daily utilities.
 
-The project is built around a simple structure: a single entry point, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
+The project is built around a simple structure: one entry point, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
 
-It starts with a friendly prompt and offers a collection of configurable modules such as weather, crypto, news, backups etc. Each module is an independent shell script that can be run through the main application or directly from the command line.
+It starts with a friendly prompt and offers a collection of configurable modules, such as weather, crypto, news, backups, and more. Each module is an independent shell script that can be run through the main application, through the dialog-based GUI, or directly from the command line.
 
 ## 🚀 Quick Start
 
-Run the application from the project root:
+**GoodMorning** includes two versions: a standard terminal CLI version and a dialog-based terminal GUI version. You can run either version from the project root.
 
+Terminal CLI: 
 ```bash
 bash main.sh
 ```
@@ -19,20 +20,45 @@ chmod +x main.sh
 ./main.sh
 ```
 
+Terminal GUI:
+```bash
+bash main_gui.sh
+```
+or
+```bash
+chmod +x main_gui.sh
+./main_gui.sh
+```
+
 You can also run individual modules directly:
 
 ```bash
 bash modules/weather.sh "New York" 
-# or a landmark
 bash modules/weather.sh "Eiffel Tower"
 bash modules/backup.sh
 ```
+
+## 📦 Requirements
+
+**GoodMorning** is designed for Bash-based Linux systems.
+
+Required tools depend on which modules are enabled. The application performs startup checks and reports missing commands before running a module.
+
+Common dependencies include:
+
+* `bash`
+* `curl`
+* `jq`
+* `bc`
+* `tar`
+* `dialog` for the terminal GUI version
 
 ## 🏗️ Project Structure
 
 ```text
 .
 ├── main.sh              # Application entry point
+├── main_gui.sh          # Dialog-based GUI launcher
 ├── config.sh            # Configuration and module registry
 ├── libs/                # Shared libraries and utilities
 └── modules/             # Individual feature modules
@@ -45,12 +71,14 @@ Most project settings live in `config.sh`.
 Examples include:
 
 * Enabled modules
+* Module display names
+* Module descriptions
 * Module shortcuts
 * Backup locations
 * Crypto preferences
 * User-facing messages
 
-The application reads the module registry from `config.sh` and builds the menu dynamically.
+The application reads the module registry from `config.sh` and builds both the terminal launcher and GUI menu dynamically.
 
 ## 🧩 How Modules Work
 
@@ -58,66 +86,113 @@ Modules are standalone scripts located in `modules/`.
 
 Each module can:
 
-* Run independently
+* Run through `main.sh`
+* Run through `main_gui.sh`
+* Run independently with `bash modules/module_name.sh`
 * Use shared libraries through `bootstrap.sh`
 * Declare its own dependencies
 * Be added or removed without affecting other modules
 
 Modules are registered through the `GM_MODULES` array in `config.sh`.
 
+## 🧾 Module Registry Format
+
+Each module entry uses pipe-separated fields:
+
+```text
+module_name|Display Name|Description|shortcut1|shortcut2|shortcut3...
+```
+
 Example:
 
 ```bash
-"weather|weather|w|🌤️ Weather"
+GM_MODULES=(
+   "weather|☁️ Weather|Show the current weather forecast|w|wt"
+   "backup|💾 Backup|Create a backup archive|b"
+   "crypto|🪙 Crypto|Show crypto prices|c"
+)
 ```
 
-Format:
+### Field Meaning
 
 ```text
-script_name|shortcut1|shortcut2|Prompt Label
+field 0 = module script name, without .sh
+field 1 = display name shown in menus
+field 2 = description shown in the GUI help text
+field 3+ = optional shortcuts
 ```
- ℹ️ You can add as many shortcuts as you want. A function on startup checks for duplicate shortcuts.
+
+Example:
+
+```bash
+"weather|☁️ Weather forecast|Show the current weather forecast for any location|w|wt"
+```
+
+Means:
+
+```text
+module script = modules/weather.sh
+display name  = ☁️ Weather forecast
+description   = Show the current weather forecast for any location
+shortcuts     = w, wt
+```
+ℹ️ Additional details:
+
+* You can add as many shortcuts as you want. A function on startup checks for duplicate shortcuts.
+* Only the first field, the module name, is required. The remaining fields are optional, and the parser provides fallbacks when they are missing.
 
 ## ➕ Adding a Module
 
 1. Copy `modules/0_template.sh` and rename to your new script name. Make sure the script lives in `modules/`.
 
-2. Load the required libraries:
+2. Load any shared libraries the module needs:
 
    ```bash
-   source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
    load_libs styles animations math
    ```
 
 3. Set the script title.
 
 	```bash
-	set_title "🌤️  TITLE 🌤️"
+	set_title "🌤️  NOTES 🌤️"
 	```
 
 4. Register the module in `config.sh`:
 
    ```bash
-   "notes|notes|n|📝 Notes"
+   "notes|📝 Notes|Open the notes module|n"
    ```
 
 5. Run the application:
 
    ```bash
    bash main.sh
+   # or
+   bash main_gui.sh
    ```
 
 Your new module will automatically appear in the launcher.
+
+## 🛡️ Validation
+
+**GoodMorning** performs startup checks to catch common configuration problems early.
+
+Current validation includes:
+
+* Checking required commands
+* Checking for missing module scripts
+* Checking for duplicate shortcuts
 
 ## 🎯 Project Goals
 
 * Learn modern Bash development
 * Build reusable shell libraries
 * Keep modules independent
+* Support both CLI and GUI workflows
+* Keep configuration centralized
 * Improve code quality over time
-* Keep the project simple and maintainable
 * Create practical terminal tools for everyday use
+* Keep the project simple and maintainable
 
-GoodMorning is an active learning project and is intentionally kept simple.
 
-The focus is on modular Bash development, reusable libraries, and gradually improving code quality while adding new features.
+**GoodMorning** is an active learning project focused on modular Bash development, reusable libraries, practical terminal tools, and gradually improving code quality while adding new features.
