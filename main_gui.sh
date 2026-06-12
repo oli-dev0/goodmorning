@@ -16,6 +16,25 @@ close_gui()
 	exit 0
 }
 
+# BUILD THE MENU - you can configure the menu order and display in config.sh
+	MENU_ITEMS=()
+
+	for entry in "${GM_MODULES[@]}"; do
+		parse_module "$entry"
+		MENU_ITEMS+=(
+			"$GM_PARSED_module_name"
+			"$GM_PARSED_module_display"
+			"$GM_PARSED_module_description"
+		)
+	done
+
+	# add exit
+	MENU_ITEMS+=(
+		"exit"
+		"❌ Exit"
+		"Close the menu and return to the terminal ❌"
+	)
+
 hide_cursor
 dialog --msgbox " Welcome and good morning to you 👋 " 5 41 || close_gui
 show_cursor
@@ -29,11 +48,7 @@ while true; do
 		--title " ☀️  Good morning  " \
 		--item-help \
 		--menu "Select a module 👇 " 0 0 5 \
-		1 "🌤️  Weather" "Check the weather for your current location or anywhere in the world 🌍" \
-		2 "🪙 Crypto" "Check current crypto prices and market movement 📈" \
-		3 "💾 Backup" "Create a local backup of your important files 🗂️" \
-		4 "☁️  Sync backups to NAS" "Sync your backup safely to the NAS over the network 🔁" \
-		5 "❌ Exit" "Close the menu and return to the terminal ❌" 2>&1 >/dev/tty); then
+		"${MENU_ITEMS[@]}" 2>&1 >/dev/tty); then
 		STATUS=0
 	else
 		STATUS=$?
