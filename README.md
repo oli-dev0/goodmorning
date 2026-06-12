@@ -29,6 +29,7 @@ or
 chmod +x main_gui.sh
 ./main_gui.sh
 ```
+ℹ️ The GUI version requires `dialog` to be installed.
 
 You can also run individual modules directly:
 
@@ -42,15 +43,19 @@ bash modules/backup.sh
 
 **GoodMorning** is designed for Bash-based Linux systems.
 
-Required tools depend on which modules are enabled. The application performs startup checks and reports missing commands before running a module.
+Required tools depend on which modules are enabled. The launcher validates the module registry at startup, and each module checks its own command dependencies before running.
 
 Common dependencies include:
 
-* `bash`
-* `curl`
+* `bash` 4+
+* `curl`, `wget`, `httpie`, or `fetch` for HTTP requests
 * `jq`
 * `bc`
 * `tar`
+* `stat`
+* `numfmt`
+* `ssh`
+* `rsync`
 * `dialog` for the terminal GUI version
 
 ## 🏗️ Project Structure
@@ -143,27 +148,34 @@ shortcuts     = w, wt
 
 ## ➕ Adding a Module
 
-1. Copy `modules/0_template.sh` and rename to your new script name. Make sure the script lives in `modules/`.
+1. Copy `modules/0_template.sh` and rename to your new script name. The template already includes the bootstrap setup.
+Make sure the script lives in `modules/`.
 
-2. Load any shared libraries the module needs:
+2. Add needed libraries:
 
    ```bash
-   load_libs styles animations math
+   load_libs animations
    ```
 
-3. Set the script title.
+3. Set the script title:
 
-	```bash
-	set_title "🌤️  NOTES 🌤️"
-	```
+   ```bash
+   set_title "🌤️  NOTES 🌤️"
+   ```
 
-4. Register the module in `config.sh`:
+4. Set the required commands:
+
+   ```bash
+   required_commands jq bc
+   ```
+
+5. Register the module in `config.sh`:
 
    ```bash
    "notes|📝 Notes|Open the notes module|n"
    ```
 
-5. Run the application:
+6. Run the application:
 
    ```bash
    bash main.sh
@@ -175,13 +187,7 @@ Your new module will automatically appear in the launcher.
 
 ## 🛡️ Validation
 
-**GoodMorning** performs startup checks to catch common configuration problems early.
-
-Current validation includes:
-
-* Checking required commands
-* Checking for missing module scripts
-* Checking for duplicate shortcuts
+**GoodMorning** validates configured modules and duplicate shortcuts at startup. Each module also checks its own command dependencies before running.
 
 ## 🎯 Project Goals
 
