@@ -108,7 +108,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 	done
 }
 
-ask()
+main()
 {
 	ask_begin
 	while true; do
@@ -119,4 +119,5 @@ ask()
 	done
 }
 
-ask
+# START APP
+	main
