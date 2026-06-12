@@ -78,18 +78,17 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 	# putting output in a variable to format later
 	rsync_log="$(mktemp)" || { log_error "cannot create temporary rsync log"; exit 1; }
+	trap 'rm -f "$rsync_log"; cleanup' EXIT
 
 	if ! rsync -avh --ignore-existing --stats \
 	"$GM_LOCAL_BACKUP_DIR" \
 	"$GM_NAS_TARGET" \
 	> "$rsync_log"; then
-		rm -f "$rsync_log"
 		log_error "rsync failed"
 		exit 1
 	fi
 
 	rsync_output="$(< "$rsync_log")"
-	rm -f "$rsync_log"
 
 	move_line_up
 	printf '\n '
