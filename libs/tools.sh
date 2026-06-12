@@ -113,10 +113,10 @@ parse_module() {
 
 	read -ra fields <<< "$entry"													# read from array $entry
 
-	GM_PARSED_module_name="${fields[0]}"																	   # weather (first) - script name
-	GM_PARSED_module_display="${fields[1]:-${GM_PARSED_module_name}}"				 # 🌤️  Weather (second) - question displayed
-	GM_PARSED_module_description="${fields[2]:-${GM_PARSED_module_display}}" # long gui description (third) - shown on the lower end of gui
-	GM_PARSED_module_shortcuts=("${fields[@]:3}")														 # everything after
+	GM_PARSED_module_name="${fields[0]}"																	  				 # weather (first) - script name
+	GM_PARSED_module_display="${fields[1]:-${GM_PARSED_module_name}.sh}"						 # 🌤️  Weather (second) - question displayed
+	GM_PARSED_module_description="${fields[2]:-Launch: ${GM_PARSED_module_name}.sh}" # long gui description (third) - shown on the lower end of gui
+	GM_PARSED_module_shortcuts=("${fields[@]:3}")																		 # everything after
 }
 
 validate_shortcuts()
