@@ -2,7 +2,6 @@
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
-	load_libs animations				# add lib name here
 	set_title "   ☀️  Good Morning   "
 	validate_modules					# check that configured modules have a .sh file
 	validate_shortcuts					# checking for duplicate module shortcuts in config.sh

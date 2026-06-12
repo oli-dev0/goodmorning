@@ -2,7 +2,6 @@
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs animations
 	set_title "🪙  CRYPTO 🪙"
 	required_commands
 

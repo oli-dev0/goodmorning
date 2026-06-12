@@ -38,7 +38,6 @@
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs animations math
 	set_title "🌤️  WEATHER 🌤️"
 	required_commands jq bc
 

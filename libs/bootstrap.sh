@@ -36,9 +36,9 @@ set -Eeuo pipefail
 # LOAD CONFIG AND CORE LIBS
 	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 	source "$GM_ROOT_DIR/config.sh"
-	source "$GM_LIBS_DIR/tools.sh"
-	load_libs styles						# must load styles here for trap errors below
-											# also good to load by default, need everywhere
+	source "$GM_LIBS_DIR/logging.sh"
+	source "$GM_LIBS_DIR/core.sh"
+	load_libs styles terminal animations http input modules math
 
 # ERROR HANDLING
 	cleanup()

@@ -25,7 +25,6 @@
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs animations
 	set_title "💾 BACKUP 💾"
 	required_commands tar stat numfmt
 # ps: backup directories are set in config.sh

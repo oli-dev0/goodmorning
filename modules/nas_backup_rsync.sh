@@ -41,7 +41,6 @@
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs animations					# add lib names here
 	set_title "☁️  NAS BACKUP SYNC ☁️"		# Adjust title
 	required_commands ssh rsync 			# checks for required commands
 # ps: backup directories are set in config.sh
