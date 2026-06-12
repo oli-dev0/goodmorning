@@ -26,7 +26,7 @@
 	# module name | display label | GUI description | shortcuts
 	GM_MODULES=(
 		"weather|🌤️  Weather|Check the weather for your current location or anywhere in the world 🌍|weather|w"
-		"crypto|🪙 Crypto|Check current crypto prices and market movement 📈|crypto|cryp|c"
+		"crypto|🪙 Crypto (WIP)|Check current crypto prices and market movement 📈|crypto|cryp|c"
 		"backup|💾 Backup|Create a local backup of your important files 🗂️|backup|back|bak|b"
 		"nas_backup_rsync|☁️  Sync backups to NAS|Sync your backup safely to the NAS over the network 🔁|rbak|rs|r"
 	)
