@@ -8,13 +8,13 @@
 	validate_shortcuts					# checking for duplicate module shortcuts in config.sh
 
 # ASK MAIN QUESTIONS
-	list_questions()		# checks the modules array in config.sh > sends it to parser to get script, shortcuts, question > go over all of them 
-	{
+ask_module_questions()		# checks the modules array in config.sh > sends it to parser to get script, shortcuts, question > go over all of them 
+{
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 		ask_qs "$GM_PARSED_MODULE_DISPLAY" "$GM_PARSED_MODULE_NAME"
 	done
-	}
+}
 
 # EXTRA HIDDEN SHORTCUTS 			# checks if what user entered is a shortcut > these are set in config.sh
 execute_shortcut()
@@ -112,7 +112,7 @@ main()
 {
 	ask_begin
 	while true; do
-		list_questions
+		ask_module_questions
 		if ! ask_more; then
 			break
 		fi
