@@ -1,6 +1,7 @@
 # test files
 0_test.sh
 libs/wttr.json
+modules/test.sh
 
 # Editors
 .vscode/

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# CONFIG
+# BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
 	load_libs animations				# add lib name here
 	set_title "   ☀️  Good Morning   "

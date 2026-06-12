@@ -157,10 +157,8 @@ run_module()
 	local module="$1"
 	local module_path="$GM_MODULES_DIR/$module.sh"
 	local saved_title="$GM_CURRENT_TITLE"				# get previous title before running new script
-	local exit_code
+	local exit_code=0
 	
-	exit_code=0
-
 	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
 	bash "$module_path" || exit_code=$?		# get exit code of previous command 'bash'

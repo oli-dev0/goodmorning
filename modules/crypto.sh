@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-# CONFIG
+# BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
-	load_libs
+	load_libs animations
 	set_title "🪙  CRYPTO 🪙"
 	required_commands
 
-echo -e " this is a work in progress"
-echo " closing in 2 sec..."
-sleep 3
+echo -e " this is a work in progress\n"
+press_any_key

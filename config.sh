@@ -26,7 +26,7 @@
 # SET MODULES - every new module needs to be setup here
 	# module name must equal the script.sh name in modules folder
 	# only module name is required, rest is optional
-	# module name | question to ask | gui description | shortcuts
+	# module name | display label | GUI description | shortcuts
 	GM_MODULES=(
 		"weather|🌤️  Weather|Check the weather for your current location or anywhere in the world 🌍|weather|w"
 		"crypto|🪙 Crypto|Check current crypto prices and market movement 📈|crypto|cryp|c"

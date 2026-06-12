@@ -39,7 +39,7 @@
 #																					#
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
 
-# CONFIG
+# BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
 	load_libs animations					# add lib names here
 	set_title "☁️  NAS BACKUP SYNC ☁️"		# Adjust title
