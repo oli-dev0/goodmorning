@@ -4,6 +4,8 @@
 	[[ -n "${_HTTP_LOADED:-}" ]] && return 0		# if var is not empty, then return (close the current source of lib)
 	_HTTP_LOADED=1 									# if its empty, continue sourcing, and set var to 1
 
+required_commands timeout
+
 # functions are derived from : Alexander Epstein https://github.com/alexanderepstein
 
 http_get_client()   # determines http get tool
