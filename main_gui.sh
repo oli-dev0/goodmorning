@@ -90,7 +90,7 @@ gui_show_welcome()
 	local status
 	hide_cursor
 	
-	if dialog --msgbox " Welcome and good morning to you 👋 " 5 41; then
+	if dialog --msgbox "${msg_hello}" 5 41; then
 		status=0
 	else
 		status=$?
@@ -115,9 +115,9 @@ gui_show_menu()
 
 		if choice=$(dialog \
 			--clear \
-			--ok-label "select" \
+			--ok-label "  RUN  " \
 			--no-cancel \
-			--title " ☀️  Good morning  " \
+			--title "  ☀️  Good Morning   " \
 			--item-help \
 			--menu "Select a module 👇 " 0 0 "$menu_height" \
 			"${MENU_ITEMS[@]}" 2>&1 >/dev/tty); then

@@ -45,7 +45,7 @@ close_app()
 
 ask_begin ()	# start of module
 {
-	echo -e " ${msg_hello} \n"
+	echo -e "${msg_hello}\n"
 	
 	local answer
 	while true; do

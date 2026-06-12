@@ -5,13 +5,10 @@
 	GM_LIBS_DIR="$GM_ROOT_DIR/libs"
 	GM_MODULES_DIR="$GM_ROOT_DIR/modules"
 
-# LOAD TOOLS
-	source "$GM_LIBS_DIR/tools.sh"			# makes load_libs available in other scripts
-
 # SET MESSAGES
 	# MAIN
 		# HELLO
-			msg_hello="Hello sir, good morning 👋"
+			msg_hello=" Welcome and good morning to you 👋 "
 		# FIRST QS ASK
 			msg_ask_first="Can I do something for you?"
 		# ASK MORE

@@ -33,9 +33,10 @@ set -Eeuo pipefail
 	trap 'minimal_cleanup; exit 143' TERM
 	trap 'minimal_cleanup; clear; exit 130' INT
 
-# LOAD CONFIG
+# LOAD CONFIG AND CORE LIBS
 	GM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 	source "$GM_ROOT_DIR/config.sh"
+	source "$GM_LIBS_DIR/tools.sh"
 	load_libs styles						# must load styles here for trap errors below
 											# also good to load by default, need everywhere
 
