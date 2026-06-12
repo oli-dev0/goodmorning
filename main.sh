@@ -12,7 +12,7 @@
 	{
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
-		ask_qs "$GM_PARSED_module_display" "$GM_PARSED_module_name"
+		ask_qs "$GM_PARSED_MODULE_DISPLAY" "$GM_PARSED_MODULE_NAME"
 	done
 	}
 
@@ -24,8 +24,8 @@
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
 
-		for shortcut in "${GM_PARSED_module_shortcuts[@]}"; do
-			[[ "$answer" == "$shortcut" ]] && { run_module "$GM_PARSED_module_name"; return 0; }
+		for shortcut in "${GM_PARSED_MODULE_SHORTCUTS[@]}"; do
+			[[ "$answer" == "$shortcut" ]] && { run_module "$GM_PARSED_MODULE_NAME"; return 0; }
 		done
 	done
 

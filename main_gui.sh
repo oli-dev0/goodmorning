@@ -67,11 +67,11 @@ gui_build_menu()
 
 		MENU_ITEMS+=(
 			"$index"
-			"$GM_PARSED_module_display"
-			"$GM_PARSED_module_description"
+			"$GM_PARSED_MODULE_DISPLAY"
+			"$GM_PARSED_MODULE_DESCRIPTION"
 		)
 
-		MENU_MODULES["$index"]="$GM_PARSED_module_name"	# assign script name to index nr
+		MENU_MODULES["$index"]="$GM_PARSED_MODULE_NAME"	# assign script name to index nr
 
 		((index++))
 	done
