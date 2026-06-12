@@ -151,31 +151,25 @@ shortcuts     = w, wt
 1. Copy `modules/0_template.sh` and rename to your new script name. The template already includes the bootstrap setup.
 Make sure the script lives in `modules/`.
 
-2. Add needed libraries:
-
-   ```bash
-   load_libs animations
-   ```
-
-3. Set the script title:
+2. Set the script title:
 
    ```bash
    set_title "🌤️  NOTES 🌤️"
    ```
 
-4. Set the required commands:
+3. Set the required commands:
 
    ```bash
-   required_commands jq bc
+   required_commands jq
    ```
 
-5. Register the module in `config.sh`:
+4. Register the module in `config.sh`:
 
    ```bash
    "notes|📝 Notes|Open the notes module|n"
    ```
 
-6. Run the application:
+5. Run the application:
 
    ```bash
    bash main.sh

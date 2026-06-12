@@ -39,7 +39,7 @@
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
 	set_title "🌤️  WEATHER 🌤️"
-	required_commands jq bc
+	required_commands jq
 
 weather_verify_json()
 {
