@@ -22,7 +22,7 @@ ask_yes_no()
 				;;
 			*)
 				clearscreen
-				printf " %s\n\n" "$msg_invalid_input"
+				printf " %s\n\n" "$GM_MSG_INVALID_INPUT"
 				;;
 		esac
 	done

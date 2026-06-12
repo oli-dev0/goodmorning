@@ -24,7 +24,7 @@ execute_shortcut()
 		parse_module "$entry"
 
 		for shortcut in "${GM_PARSED_MODULE_SHORTCUTS[@]}"; do
-			[[ "$answer" == "$shortcut" ]] && { run_module "$GM_PARSED_MODULE_NAME"; return 0; }
+			[[ "$answer" == "$shortcut" ]] && { run_module "$GM_PARSED_MODULE_NAME"; return $?; }
 		done
 	done
 
@@ -42,6 +42,24 @@ close_app()
 	exit 0
 }
 
+main_ask_yes_no()
+{
+	local answer="${1:-}"
+	case "$answer" in
+		y|ye|yes|ok|k|"")
+			clearscreen
+			;;
+		n|no|nop|nope)
+			close_app
+			;;
+		*)
+			clearscreen
+			echo -e " ${GM_MSG_INVALID_INPUT} \n"
+			return 1
+			;;
+	esac
+}
+
 ask_begin ()	# start of module
 {
 	echo -e "${GM_MSG_HELLO}\n"
@@ -50,22 +68,8 @@ ask_begin ()	# start of module
 	while true; do
 		read -rp " ${GM_MSG_ASK_FIRST} " answer
 		answer=${answer,,}
-		
 		execute_shortcut "$answer" && { ask_more; return; }
-
-		case "$answer" in
-			y|ye|yes|ok|k|"")
-				clearscreen
-				break
-				;;
-			n|no|nop|nope)
-				close_app
-				;;
-			*)
-				clearscreen
-				echo -e " ${GM_MSG_INVALID_INPUT} \n"
-				;;
-		esac
+		main_ask_yes_no "$answer" && break
 	done
 }
 
@@ -90,20 +94,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 		read -rp " ${GM_MSG_ASK_MORE} " answer
 		answer=${answer,,}
 		execute_shortcut "$answer" && continue
-		
-		case "$answer" in
-			y|ye|yes|ok|k|"")
-				clearscreen
-				return 0
-				;;
-			n|no|nop|nope)
-				close_app
-				;;
-			*)
-				clearscreen
-				echo -e " ${GM_MSG_INVALID_INPUT} \n"
-				;;
-		esac	
+		main_ask_yes_no "$answer" && break
 	done
 }
 
