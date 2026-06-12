@@ -35,7 +35,7 @@ close_app()
 {
 	clearscreen
 	hide_cursor
-	echo -ne " ${msg_gbye} "
+	echo -ne " ${GM_MSG_GBYE} "
 	sleep 1.5
 	show_cursor
 	clear
@@ -44,11 +44,11 @@ close_app()
 
 ask_begin ()	# start of module
 {
-	echo -e "${msg_hello}\n"
+	echo -e "${GM_MSG_HELLO}\n"
 	
 	local answer
 	while true; do
-		read -rp " ${msg_ask_first} " answer
+		read -rp " ${GM_MSG_ASK_FIRST} " answer
 		answer=${answer,,}
 		
 		execute_shortcut "$answer" && { ask_more; return; }
@@ -63,7 +63,7 @@ ask_begin ()	# start of module
 				;;
 			*)
 				clearscreen
-				echo -e " ${msg_invalid_input} \n"
+				echo -e " ${GM_MSG_INVALID_INPUT} \n"
 				;;
 		esac
 	done
@@ -87,7 +87,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 	local answer
 
 	while true; do
-		read -rp " ${msg_ask_more} " answer
+		read -rp " ${GM_MSG_ASK_MORE} " answer
 		answer=${answer,,}
 		execute_shortcut "$answer" && continue
 		
@@ -101,7 +101,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 				;;
 			*)
 				clearscreen
-				echo -e " ${msg_invalid_input} \n"
+				echo -e " ${GM_MSG_INVALID_INPUT} \n"
 				;;
 		esac	
 	done

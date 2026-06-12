@@ -89,7 +89,7 @@ gui_show_welcome()
 	local status
 	hide_cursor
 	
-	if dialog --msgbox "${msg_hello}" 5 41; then
+	if dialog --msgbox "${GM_MSG_HELLO}" 5 41; then
 		status=0
 	else
 		status=$?

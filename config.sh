@@ -8,13 +8,13 @@
 # SET MESSAGES
 	# MAIN
 		# HELLO
-			msg_hello=" Welcome and good morning to you 👋 "
+			GM_MSG_HELLO=" Welcome and good morning to you 👋 "
 		# FIRST QS ASK
-			msg_ask_first="Can I do something for you?"
+			GM_MSG_ASK_FIRST="Can I do something for you?"
 		# ASK MORE
-			msg_ask_more="Anything else?"
+			GM_MSG_ASK_MORE="Anything else?"
 		# GOODBYE
-			msg_gbye="Okay, goodbye 👋"
+			GM_MSG_GBYE="Okay, goodbye 👋"
 
 	# GLOBAL
 		# INVALID INPUT
