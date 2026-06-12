@@ -109,11 +109,14 @@ clearline()			 # goes to beginning and clears entired current line
 parse_module() {
 	local entry="$1"
 	local IFS='|'																					# sets | as delimiter, to split the module info in config.sh
+	local fields
+
 	read -ra fields <<< "$entry"													# read from array $entry
 
-	GM_PARSED_module_name="${fields[0]}"														# weather (first)
-	GM_PARSED_module_question="${fields[-1]}"												# 🌤️  Weather (last)
-	GM_PARSED_module_shortcuts=("${fields[@]:1:${#fields[@]}-2}")		# everything in between
+	GM_PARSED_module_name="${fields[0]}"																	   # weather (first) - script name
+	GM_PARSED_module_display="${fields[1]:-${GM_PARSED_module_name}}"				 # 🌤️  Weather (second) - question displayed
+	GM_PARSED_module_description="${fields[2]:-${GM_PARSED_module_display}}" # long gui description (third) - shown on the lower end of gui
+	GM_PARSED_module_shortcuts=("${fields[@]:3}")														 # everything after
 }
 
 validate_shortcuts()

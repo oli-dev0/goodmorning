@@ -12,7 +12,7 @@
 	{
 	for entry in "${GM_MODULES[@]}"; do
 		parse_module "$entry"
-		ask_qs "$GM_PARSED_module_question" "$GM_PARSED_module_name"
+		ask_qs "$GM_PARSED_module_display" "$GM_PARSED_module_name"
 	done
 	}
 

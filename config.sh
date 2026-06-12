@@ -24,14 +24,14 @@
 		msg_invalid_input="Invalid input, please use [y/n]"
 
 # SET MODULES - every new module needs to be setup here
-	# only module name is required, rest is optional
 	# module name must equal the script.sh name in modules folder
-	# module name | shortcuts | question to ask?
+	# only module name is required, rest is optional
+	# module name | question to ask | gui description | shortcuts
 	GM_MODULES=(
-		"weather|weather|w|🌤️  Weather"
-		"crypto|crypto|cryp|c|🪙  Crypto"
-		"backup|backup|back|bak|b|💾 Backup"
-		"nas_backup_rsync|rs|r|☁️  Sync backups to NAS"
+		"weather|🌤️  Weather|Check the weather for your current location or anywhere in the world 🌍|weather|w"
+		"crypto|🪙 Crypto|Check current crypto prices and market movement 📈|crypto|cryp|c"
+		"backup|💾 Backup|Create a local backup of your important files 🗂️|backup|back|bak|b"
+		"nas_backup_rsync|☁️  Sync backups to NAS|Sync your backup safely to the NAS over the network 🔁|rbak|rs|r"
 	)
 
 # WEATHER
