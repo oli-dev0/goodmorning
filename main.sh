@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Version 1.0
 
 # CONFIG
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
@@ -33,6 +32,17 @@
 	return 1
 	}
 
+close_app()
+{
+	clearscreen
+	hide_cursor
+	echo -ne " ${msg_gbye} "
+	sleep 1.5
+	show_cursor
+	clear
+	exit 0
+}
+
 ask_begin ()	# start of module
 {
 	echo -e " ${msg_hello} \n"
@@ -50,13 +60,7 @@ ask_begin ()	# start of module
 				break
 				;;
 			n|no|nop|nope)
-				clearscreen
-				hide_cursor
-				echo -ne " ${msg_gbye} "
-				sleep 1.5
-				show_cursor
-				clear
-				return 1
+				close_app
 				;;
 			*)
 				clearscreen
@@ -94,13 +98,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 				return 0
 				;;
 			n|no|nop|nope)
-				clearscreen
-				hide_cursor
-				echo -ne " ${msg_gbye} "
-				sleep 1.5
-				show_cursor
-				clear
-				return 1
+				close_app
 				;;
 			*)
 				clearscreen
@@ -112,6 +110,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 
 ask()
 {
+	ask_begin
 	while true; do
 		list_questions
 		if ! ask_more; then
@@ -120,5 +119,4 @@ ask()
 	done
 }
 
-ask_begin || exit 0
 ask
