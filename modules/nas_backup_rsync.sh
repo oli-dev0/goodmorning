@@ -55,7 +55,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 	if [[ ! -d "$GM_LOCAL_BACKUP_DIR" ]]; then
 		log_error "local backup folder not found"; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_LOCAL_BACKUP_DIR"
-		exit 1
+		press_any_key; exit 1
 	else
 		move_line_up
 		log_success "Local folder exists"; move_line_up
@@ -64,9 +64,10 @@ log_start "nas rsync - start folder checks"; clearscreen
 # CHECK IF TARGET FOLDER EXISTS ON NAS
 	animation_spinner "Checking NAS connection... "
 	if ! ssh -o BatchMode=yes -o ConnectTimeout=5 "$GM_NAS_HOST" test -d "$GM_NAS_PATH"; then
+		echo
 		log_error "NAS backup folder not found or NAS is unreachable"; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_NAS_PATH"
-		exit 1
+		press_any_key; exit 1
 	else
 		move_line_up
 		log_success "Target folder exists"; move_line_up
