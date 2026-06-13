@@ -2,6 +2,7 @@
 0_test.sh
 libs/wttr.json
 modules/test.sh
+checks.sh
 
 # Editors
 .vscode/
