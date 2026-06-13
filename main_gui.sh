@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# version 2.0
 
 # A simple interactive menu using "dialog" command
 

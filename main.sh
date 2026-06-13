@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# version 2.0
 
 # BOOTSTRAP
 	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
