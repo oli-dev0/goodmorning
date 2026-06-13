@@ -10,11 +10,7 @@ required_commands bc
   # "Moving on" spinner
 	anim_moving_on()
 	{
-	  hide_keyboard
 	  animation_spinner "Moving on " 0.5
-
-	  show_keyboard
-	  flushread
 	}
 
   # Moving status bar
@@ -23,16 +19,14 @@ required_commands bc
   	local msg="${1:-Processing...}"
 
   	hide_keyboard
+  	hide_cursor
   	echo -e " ${SUCCESS}$msg${RESET}"; echo -n " "
   	sleep 0.3
   	animation_reveal "▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪" 0.01 "${SUCCESS}"
   	printf "\n "
-  	show_keyboard
-  	flushread
   }
 
-# SPINNER
-# USAGE: animation_spinner "TEXT" 1.5 "${COLOR}"
+# SPINNER - usage: animation_spinner "TEXT" 1.5 "${COLOR}"
   animation_spinner()
   {
 	# ARGUMENTS
@@ -63,8 +57,7 @@ required_commands bc
 	flushread
   }
 
-# TEXT REVEAL
-# USAGE: animation_reveal "TEXT" 0.05 "${COLOR}"
+# TEXT REVEAL - usage: animation_reveal "TEXT" 0.05 "${COLOR}"
   animation_reveal() 
   {
   	local msg="${1:- Default text....}"
@@ -73,6 +66,7 @@ required_commands bc
   	local i
 
   	hide_keyboard
+  	hide_cursor
   	printf "%s" "$color"
 
   	for ((i=0; i<=${#msg}; i++)); do
@@ -82,11 +76,11 @@ required_commands bc
 
   	printf "%s" "${RESET}"  
   	show_keyboard
+  	show_cursor
   	flushread
   }
 
-# COUNTDOWN
-# USAGE: anim_countdown "TEXT" 5 "${COLOR}"
+# COUNTDOWN - usage: anim_countdown "TEXT" 5 "${COLOR}"
   anim_countdown()
   {
   	local msg="${1:-Continue in}"
@@ -95,6 +89,7 @@ required_commands bc
   	local i
 
   	hide_keyboard
+  	hide_cursor
   	printf "%s" "$color"
 
   	for (( i=seconds; i>=1; i-- )); do
@@ -107,4 +102,5 @@ required_commands bc
   	flushread
   	clearline
   	show_keyboard
+  	show_cursor
   }
