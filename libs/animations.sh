@@ -25,7 +25,7 @@ required_commands bc
   	hide_keyboard
   	echo -e " ${SUCCESS}$msg${RESET}"; echo -n " "
   	sleep 0.3
-  	animation_reveal "▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪" 0.015 "${SUCCESS}"
+  	animation_reveal "▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪▪" 0.01 "${SUCCESS}"
   	printf "\n "
   	show_keyboard
   	flushread

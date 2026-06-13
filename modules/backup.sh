@@ -34,7 +34,7 @@
 	log_start "backup - folders check started"; clearscreen
 
 # CHECK IF SOURCE FOLDER EXISTS
-	animation_spinner "Checking source folder... "
+	animation_spinner "Checking source folder... " 0.5
 	if [[ ! -d "$GM_BACKUP_SOURCE" ]]; then
 		log_error "source directory does not exist" >&2; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_BACKUP_SOURCE"
@@ -48,7 +48,7 @@
 	mkdir -p "$GM_BACKUP_DEST" 2>/dev/null || { clearscreen; log_error "cannot create backup folder '$GM_BACKUP_DEST' - check path or permission" >&2; exit 1; }
 
 # CHECK IF BACKUP FOLDER EXISTS
-	animation_spinner "Checking backup folder... "
+	animation_spinner "Checking backup folder... " 0.5
 	if [[ ! -d "$GM_BACKUP_DEST" ]]; then
 		log_error "destination directory does not exist" >&2; move_line_up
 		printf '  📂 %sPath:%s %s\n\n' "${WARNING}" "${RESET}" "$GM_BACKUP_DEST"
@@ -65,7 +65,7 @@
 	# backup_dest="hello"
 
 # CHECK IF SOURCE AND BACKUP FOLDER ARE THE SAME
-	animation_spinner "Checking if folders are the same... "
+	animation_spinner "Checking if folders are the same... " 0.5
 	if [[ "$backup_source" == "$backup_dest" ]]; then
 		log_error "backup source and destination cannot be the same directory" >&2; move_line_up
 		printf '        📂 %sSource:%s %s\n' "${BOLD}" "${RESET}" "'$backup_source'"
@@ -102,7 +102,7 @@
 
 # PROGRESS ANIMATION
 	log_start "backup - started"; move_line_up 2
-	anim_status_bar "Backup in progress...  "; sleep 0.5
+	anim_status_bar "Backup in progress...  "; sleep 0.3
 
 # MAKE BACKUP
 	tar "${tar_excludes[@]}" --transform='s|^\./||' -czf "$tar_file" -C "$backup_source" .
