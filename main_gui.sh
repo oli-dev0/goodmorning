@@ -19,7 +19,7 @@ gui_close()
 	show_cursor
 	clear
 	echo
-	animation_spinner "Goodbye"
+	animation_spinner "Goodbye" 1000
 	clear
 	exit 0
 }

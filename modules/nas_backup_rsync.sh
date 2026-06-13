@@ -75,7 +75,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 # START RSYNC BACKUP
 	log_start "nas rsync - backup started"; move_line_up 2
-	animation_spinner "Syncing backups to NAS... " 1
+	animation_spinner "Syncing backups to NAS... " 750
 
 	# putting output in a variable to format later
 	rsync_log="$(mktemp)" || { log_error "cannot create temporary rsync log"; exit 1; }

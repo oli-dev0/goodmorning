@@ -50,7 +50,6 @@ Common dependencies include:
 * `bash` 4+
 * `curl`, `wget`, `httpie`, or `fetch` for HTTP requests
 * `jq`
-* `bc`
 * `tar`
 * `stat`
 * `numfmt`
