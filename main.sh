@@ -47,7 +47,7 @@ main_ask_yes_no()
 			;;
 		*)
 			clearscreen
-			echo -e " ${GM_MSG_INVALID_INPUT} \n"
+			echo -e "${GM_MSG_INVALID_INPUT}\n"
 			return 1
 			;;
 	esac
@@ -59,7 +59,7 @@ ask_begin ()	# start of module
 	
 	local answer
 	while true; do
-		read -rp " ${GM_MSG_ASK_FIRST} " answer
+		read -rp "${GM_MSG_ASK_FIRST}" answer
 		answer=${answer,,}
 		execute_shortcut "$answer" && { ask_more; return; }
 		main_ask_yes_no "$answer" && break
@@ -84,7 +84,7 @@ ask_more()					# triggers once all questions are asked or after a shortcut was u
 	local answer
 
 	while true; do
-		read -rp " ${GM_MSG_ASK_MORE} " answer
+		read -rp "${GM_MSG_ASK_MORE}" answer
 		answer=${answer,,}
 		execute_shortcut "$answer" && continue
 		main_ask_yes_no "$answer" && break

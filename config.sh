@@ -10,15 +10,15 @@
 		# HELLO
 			GM_MSG_HELLO=" Welcome and good morning to you 👋 "
 		# FIRST QS ASK
-			GM_MSG_ASK_FIRST="Can I do something for you?"
+			GM_MSG_ASK_FIRST=" Can I do something for you? "
 		# ASK MORE
-			GM_MSG_ASK_MORE="Anything else?"
+			GM_MSG_ASK_MORE=" Anything else? "
 		# GOODBYE
 			GM_MSG_GBYE=" Okay, goodbye 👋 "
 
 	# GLOBAL
 		# INVALID INPUT
-		GM_MSG_INVALID_INPUT="Invalid input, please use [y/n]"
+		GM_MSG_INVALID_INPUT=" Invalid input, please use [y/n] "
 
 # SET MODULES - every new module needs to be setup here
 	# module name must equal the script.sh name in modules folder

@@ -23,13 +23,13 @@ gui_handle_dialog_exit_status()
 			return 0
 			;;
 		255)
-			gui_close 		# status code 255 usually means ESC key was pressed
+			close_app 		# status code 255 usually means ESC key was pressed
 			;;
 		*)
 			hide_cursor
 			dialog --msgbox "❌ Error: dialog failed with status '$status'" 6 50 || true
 			show_cursor
-			gui_close
+			close_app
 			;;
 	esac
 
@@ -115,7 +115,7 @@ gui_show_menu()
 
 		case "$selected_module" in
 			exit) 
-				gui_close
+				close_app
 				;;
 			"") 
 				dialog --msgbox "Invalid menu selection: '$choice'" 6 50 || true
