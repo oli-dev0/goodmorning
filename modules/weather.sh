@@ -38,7 +38,7 @@
 
 # BOOTSTRAP
 	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-	source "$SCRIPT_DIR/../libs/bootstrap.sh"
+	source "$SCRIPT_DIR/../libs/bootstrap.sh" || { echo -e "\n ❌ Fatal: bootstrap failed \n"; exit 1; }
 	set_title "🌤️  WEATHER 🌤️"
 	required_commands jq
 

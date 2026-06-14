@@ -3,7 +3,7 @@
 
 # BOOTSTRAP
 	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-	source "$SCRIPT_DIR/libs/bootstrap.sh"	
+	source "$SCRIPT_DIR/libs/bootstrap.sh" || { echo -e "\n ❌ Fatal: bootstrap failed \n"; exit 1; }
 	set_title "   ☀️  Good Morning   "
 	validate_modules					# check that configured modules have a .sh file
 	validate_shortcuts					# checking for duplicate module shortcuts in config.sh
