@@ -40,7 +40,8 @@
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
 
 # BOOTSTRAP
-	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
+	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+	source "$SCRIPT_DIR/../libs/bootstrap.sh"
 	set_title "☁️  NAS BACKUP SYNC ☁️"		# Adjust title
 	required_commands ssh rsync 			# checks for required commands
 # ps: backup directories are set in config.sh

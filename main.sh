@@ -2,7 +2,8 @@
 # version 2.0
 
 # BOOTSTRAP
-	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
+	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+	source "$SCRIPT_DIR/libs/bootstrap.sh"
 	set_title "   ☀️  Good Morning   "
 	validate_modules					# check that configured modules have a .sh file
 	validate_shortcuts					# checking for duplicate module shortcuts in config.sh

@@ -24,7 +24,8 @@
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = #
 
 # BOOTSTRAP
-	source "$(dirname "${BASH_SOURCE[0]}")/../libs/bootstrap.sh"
+	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+	source "$SCRIPT_DIR/../libs/bootstrap.sh"
 	set_title "💾 BACKUP 💾"
 	required_commands tar stat numfmt
 # ps: backup directories are set in config.sh

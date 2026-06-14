@@ -4,7 +4,8 @@
 # A simple interactive menu using "dialog" command
 
 # BOOTSTRAP
-	source "$(dirname "${BASH_SOURCE[0]}")/libs/bootstrap.sh"
+	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+	source "$SCRIPT_DIR/libs/bootstrap.sh"
 	set_title "   ☀️  Good Morning   "
 	required_commands dialog
 	validate_modules					# check that configured modules have a .sh file
