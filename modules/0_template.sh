@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # BOOTSTRAP
-	SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+	readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 	source "$SCRIPT_DIR/../libs/bootstrap.sh" || { echo -e "\n ❌ Fatal: bootstrap failed \n"; exit 1; }
 	set_title "🌤️ MODULE TITLE 🌤️"	# Adjust title
 	required_commands jq			# checks for required commands

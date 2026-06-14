@@ -19,7 +19,7 @@ log_success()
 log_warning()
 {
 	local msg=${1:-unknown}	
-	printf '%s\n\n' "${WARNING} ⚠️ Warning: ${msg} ${RESET}"
+	printf '%s\n\n' "${WARNING} ⚠️  Warning: ${msg} ${RESET}"
 }
 
 log_error()
