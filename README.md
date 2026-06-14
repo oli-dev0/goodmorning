@@ -2,30 +2,34 @@
 
 **GoodMorning** is a modular Bash launcher for small daily utilities.
 
-The project is built around a simple structure: one entry point, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
+The project is built around a simple structure: multiple entry points, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
 
-It starts with a friendly prompt and offers a collection of configurable modules, such as weather, crypto, news, backups, and more. Each module is an independent shell script that can be run through the main application, through the dialog-based GUI, or directly from the command line.
+It starts with a friendly prompt and offers a collection of configurable modules, such as weather, crypto, news, backups, and more. Each module is an independent shell script that can be run through the prompt-based launcher, the select-menu launcher, the dialog-based GUI, or directly from the command line.
 
 ## 🚀 Quick Start
 
-**GoodMorning** includes two versions: a standard terminal CLI version and a dialog-based terminal GUI version. You can run either version from the project root.
+**GoodMorning** includes three launchers: a prompt-based terminal CLI, a Bash `select` menu, and a dialog-based terminal GUI. You can run any version from the project root.
 
 Terminal CLI: 
 ```bash
 bash main.sh
-```
-or
-```bash
+# or
 chmod +x main.sh
 ./main.sh
+```
+
+Terminal select menu:
+```bash
+bash main_select.sh
+# or
+chmod +x main_select.sh
+./main_select.sh
 ```
 
 Terminal GUI:
 ```bash
 bash main_gui.sh
-```
-or
-```bash
+# or
 chmod +x main_gui.sh
 ./main_gui.sh
 ```
@@ -61,7 +65,8 @@ Common dependencies include:
 
 ```text
 .
-├── main.sh              # Application entry point
+├── main.sh              # Prompt-based terminal launcher
+├── main_select.sh       # Bash select-menu launcher
 ├── main_gui.sh          # Dialog-based GUI launcher
 ├── config.sh            # Configuration and module registry
 ├── libs/                # Shared libraries and utilities
@@ -82,7 +87,7 @@ Examples include:
 * Crypto preferences
 * User-facing messages
 
-The application reads the module registry from `config.sh` and builds both the terminal launcher and GUI menu dynamically.
+The application reads the module registry from `config.sh` and builds the terminal launchers and GUI menu dynamically.
 
 ## 🧩 How Modules Work
 
@@ -91,6 +96,7 @@ Modules are standalone scripts located in `modules/`.
 Each module can:
 
 * Run through `main.sh`
+* Run through `main_select.sh`
 * Run through `main_gui.sh`
 * Run independently with `bash modules/module_name.sh`
 * Use shared libraries through `bootstrap.sh`
@@ -173,6 +179,8 @@ Make sure the script lives in `modules/`.
    ```bash
    bash main.sh
    # or
+   bash main_select.sh
+   # or
    bash main_gui.sh
    ```
 
@@ -187,7 +195,7 @@ Your new module will automatically appear in the launcher.
 * Learn modern Bash development
 * Build reusable shell libraries
 * Keep modules independent
-* Support both CLI and GUI workflows
+* Support multiple terminal workflows
 * Keep configuration centralized
 * Improve code quality over time
 * Create practical terminal tools for everyday use
