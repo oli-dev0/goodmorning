@@ -14,7 +14,7 @@
 		# ASK MORE
 			GM_MSG_ASK_MORE="Anything else?"
 		# GOODBYE
-			GM_MSG_GBYE="Okay, goodbye 👋"
+			GM_MSG_GBYE=" Okay, goodbye 👋 "
 
 	# GLOBAL
 		# INVALID INPUT

@@ -14,16 +14,6 @@
 	declare -a MENU_ITEMS=()
 	declare -A MENU_MODULES=()
 
-gui_close()
-{
-	show_cursor
-	clear
-	echo
-	animation_spinner "Goodbye" 1000
-	clear
-	exit 0
-}
-
 gui_handle_dialog_exit_status()
 {
 	local status="${1:?missing dialog status}"

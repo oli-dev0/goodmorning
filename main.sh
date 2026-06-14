@@ -35,17 +35,6 @@ execute_shortcut()
 	return 1
 	}
 
-close_app()
-{
-	clearscreen
-	hide_cursor
-	echo -ne " ${GM_MSG_GBYE} "
-	sleep 1.5
-	show_cursor
-	clear
-	exit 0
-}
-
 main_ask_yes_no()
 {
 	local answer="${1:-}"

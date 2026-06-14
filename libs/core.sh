@@ -60,3 +60,12 @@ set_title()
 	printf '\033]0;%s\007' "$GM_CURRENT_TITLE"
 	clearscreen
 }
+
+close_app()
+{
+	show_cursor
+	clearscreen
+	animation_spinner "${GM_MSG_GBYE}" 1000
+	clear
+	exit 0
+}
