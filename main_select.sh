@@ -16,7 +16,7 @@ select_hello()
 	clearscreen
 	echo -e "${GM_MSG_HELLO}\n"
 	hide_cursor
-	press_any_key "<CONTINUE>"
+	press_any_key "           <CONTINUE>"
 	show_cursor
 	clearscreen
 }
