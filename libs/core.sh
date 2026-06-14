@@ -65,7 +65,7 @@ close_app()
 {
 	show_cursor
 	clearscreen
-	animation_spinner "${GM_MSG_GBYE}" 1000
+	animation_spinner "${GM_MSG_GBYE}" 650
 	clear
 	exit 0
 }

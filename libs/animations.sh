@@ -8,7 +8,7 @@
   # "Moving on" spinner
 	anim_moving_on()
 	{
-		animation_spinner "Moving on "
+		animation_spinner "Moving on " 350
 	}
 
 	# Moving status bar
