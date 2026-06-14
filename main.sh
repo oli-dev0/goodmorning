@@ -25,7 +25,10 @@ execute_shortcut()
 		parse_module "$entry"
 
 		for shortcut in "${GM_PARSED_MODULE_SHORTCUTS[@]}"; do
-			[[ "$answer" == "$shortcut" ]] && { run_module "$GM_PARSED_MODULE_NAME"; return $?; }
+			if [[ "$answer" == "$shortcut" ]]; then
+				run_module "$GM_PARSED_MODULE_NAME" || exit $?
+				return 0
+			fi
 		done
 	done
 
@@ -80,7 +83,7 @@ ask_qs() 	# function to ask if user wants to run module
 	local module="${2:?module is required}"			# set module name from second argument
 
 	if ask_yes_no "${question}?"; then
-		run_module "$module"
+		run_module "$module" || exit $?
 	else
 		anim_moving_on
 		clearscreen

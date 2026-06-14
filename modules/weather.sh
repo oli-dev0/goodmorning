@@ -151,7 +151,7 @@ weather_fetch()
 
 # FETCH JSON
 	# real curl > show error if no http_get client installed
-	weather_json="$(http_get "${GM_WEATHER_API_URL}${location}${GM_WEATHER_FORMAT}")" || { log_error "weather - http_get"; move_line_up 3; exit 1; }
+	weather_json="$(http_get "${GM_WEATHER_API_URL}${location}${GM_WEATHER_FORMAT}")" || { log_error "weather - http_get"; move_line_up 2; exit 1; }
 	# weather_json=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 

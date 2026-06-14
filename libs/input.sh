@@ -58,8 +58,10 @@ ask_first()
 
 press_any_key()
 {
+	local msg=${1:-Press any key to continue...}
+
 	hide_keyboard
-	read -rn1 -p "${BLINK} Press any key to continue... ${RESET}"; clearline
+	read -rn1 -p "${BLINK} $msg ${RESET}"; clearline
 	show_keyboard
 	anim_moving_on
 	clear

@@ -65,6 +65,8 @@ run_module()
 	[[ ! -f "$module_path" ]] && { clearscreen; log_error "module '$module' not found at '$module_path'" >&2; return 1; }
 
 	bash "$module_path" || exit_code=$?		# get exit code of previous command 'bash'
-	set_title "$saved_title"							# set both titles back to previous title
+	if (( exit_code == 0 )); then
+		set_title "$saved_title"						# set both titles back to previous title
+	fi
 	return "$exit_code"										# return exit code from bash command or 0
 }

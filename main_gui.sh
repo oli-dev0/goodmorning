@@ -24,15 +24,6 @@ gui_close()
 	exit 0
 }
 
-gui_failed_module_error()
-{
-	local module="${1:?missing module}"
-
-	hide_cursor
-	dialog --msgbox "  ❌ Error: module '${module}.sh' failed" 5 40 || true
-	show_cursor
-}
-
 gui_handle_dialog_exit_status()
 {
 	local status="${1:?missing dialog status}"
@@ -140,7 +131,7 @@ gui_show_menu()
 				dialog --msgbox "Invalid menu selection: '$choice'" 6 50 || true
 				;;
 			*) 
-				run_module "$selected_module" || gui_failed_module_error "$selected_module"
+				run_module "$selected_module" || exit $?
 				;;
 		esac
 	done
