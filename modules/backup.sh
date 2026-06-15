@@ -62,8 +62,6 @@
 # GET TRUE PATH
 	backup_source="$(cd "$GM_BACKUP_SOURCE" && pwd -P)"
 	backup_dest="$(cd "$GM_BACKUP_DEST" && pwd -P)"
-	# backup_source="hello"
-	# backup_dest="hello"
 
 # CHECK IF SOURCE AND BACKUP FOLDER ARE THE SAME
 	animation_spinner "Checking if folders are the same... "
@@ -74,9 +72,26 @@
 		exit 1
 	else
 		move_line_up
-		log_success "All folders valid";
+		log_success "All folders valid"; move_line_up
 	fi
-	
+
+# CHECK IF ENOUGH DISK SPACE IS AVAILABLE
+	animation_spinner "Checking available disk space... "
+
+	available_kb=$(df --output=avail "$backup_dest" | tail -n1)
+	source_kb=$(du -sk "$backup_source" | cut -f1)
+	required_kb=$(( source_kb * 120 / 100 ))
+
+	if (( available_kb < required_kb )); then
+		echo
+		log_error "not enough disk space available for backup"; move_line_up
+		echo -e "${BOLD} 📂 You have ${WARNING}$(( available_kb / 1024 ))MB${RESET}${BOLD} left, but you need ${WARNING}$(( required_kb / 1024 ))MB ${RESET}\n"
+		exit 1
+	else
+		move_line_up
+		log_success "Enough disk space available";
+	fi
+
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M')"
 	readonly timestamp
