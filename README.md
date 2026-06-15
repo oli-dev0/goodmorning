@@ -4,11 +4,11 @@
 
 The project is built around a simple structure: multiple entry points, a central module registry, shared helper libraries, and independent modules that can be added or removed as needed.
 
-It starts with a friendly prompt and offers a collection of configurable modules, such as weather, crypto, news, backups, and more. Each module is an independent shell script that can be run through the prompt-based launcher, the select-menu launcher, the dialog-based GUI, or directly from the command line.
+It starts with a friendly prompt and offers a collection of configurable modules, such as weather, crypto, news, backups, and more. Each module is an independent shell script that can be run through several launchers, or directly from the command line
 
 ## 🚀 Quick Start
 
-**GoodMorning** includes three launchers: a prompt-based terminal CLI, a Bash `select` menu, and a dialog-based terminal GUI. You can run any version from the project root.
+**GoodMorning** includes four launchers: a prompt-based terminal CLI, a Bash `select` menu, an `fzf` searchable menu, and a dialog-based terminal GUI. You can run any version from the project root.
 
 Terminal CLI: 
 ```bash
@@ -25,6 +25,15 @@ bash main_select.sh
 chmod +x main_select.sh
 ./main_select.sh
 ```
+
+Searchable fzf menu:
+```bash
+bash main_fzf.sh
+# or
+chmod +x main_fzf.sh
+./main_fzf.sh
+```
+ℹ️ The fzf version requires `fzf` to be installed.
 
 Terminal GUI:
 ```bash
@@ -59,6 +68,7 @@ Common dependencies include:
 * `numfmt`
 * `ssh`
 * `rsync`
+* `fzf` for the searchable terminal menu
 * `dialog` for the terminal GUI version
 
 ## 🏗️ Project Structure
@@ -67,6 +77,7 @@ Common dependencies include:
 .
 ├── main.sh              # Prompt-based terminal launcher
 ├── main_select.sh       # Bash select-menu launcher
+├── main_fzf.sh          # fzf searchable menu launcher
 ├── main_gui.sh          # Dialog-based GUI launcher
 ├── config.sh            # Configuration and module registry
 ├── libs/                # Shared libraries and utilities
@@ -97,6 +108,7 @@ Each module can:
 
 * Run through `main.sh`
 * Run through `main_select.sh`
+* Run through `main_fzf.sh`
 * Run through `main_gui.sh`
 * Run independently with `bash modules/module_name.sh`
 * Use shared libraries through `bootstrap.sh`
@@ -180,6 +192,8 @@ Make sure the script lives in `modules/`.
    bash main.sh
    # or
    bash main_select.sh
+   # or
+   bash main_fzf.sh
    # or
    bash main_gui.sh
    ```
