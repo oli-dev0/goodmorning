@@ -49,6 +49,9 @@ weather_verify_json()
 	# CHECK IF API RETURNED SOMETHING
 		[[ -z "$json" ]] && { clearscreen; log_error "empty JSON file"; return 1; }
 
+	# CHECK IF API IS ONLINE
+			[[ "$json" == *"weather data source not available"* ]] && { clearscreen; log_error "weather API not available"; return 1; }
+
 	# CHECK IF LOCATION IS CORRECT
 		[[ "$json" == *"location not found"* ]] && { clearscreen; log_error "location not found"; return 1; }
 	
