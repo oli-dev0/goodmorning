@@ -66,6 +66,8 @@ Common dependencies include:
 * `tar`
 * `stat`
 * `numfmt`
+* `pv` for live backup progress bars
+* `gzip`
 * `ssh`
 * `rsync`
 * `fzf` for the searchable terminal menu

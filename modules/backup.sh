@@ -27,7 +27,7 @@
 	readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 	source "$SCRIPT_DIR/../libs/bootstrap.sh" || { echo -e "\n ❌ Fatal: bootstrap failed \n"; exit 1; }
 	set_title "💾 BACKUP 💾"
-	required_commands tar stat numfmt
+	required_commands tar stat numfmt pv gzip
 # ps: backup directories are set in config.sh
 
 # ASK
@@ -116,17 +116,44 @@
 		tar_excludes+=(--exclude="./${tar_file#"$backup_source"/}")	# exclude it
 	fi
 
+# PROGRESS SIZE
+	exclude_paths=(
+		-path "$backup_source/tmp"
+		-o -path "$backup_source/cache"
+	)
+
+	if [[ "$backup_dest" == "$backup_source"/* ]]; then
+		exclude_paths+=(
+			-o -path "$backup_dest"
+		)
+	fi
+
+	progress_total_bytes=$(
+		find "$backup_source" \
+			\( "${exclude_paths[@]}" \) -prune -o \
+			-type f -printf '%s\n' |
+			awk '{ sum += $1 } END { print sum + 0 }'
+	)
+
+	progress_pv_args=(-pterb)
+	if (( progress_total_bytes > 0 )); then
+		progress_pv_args=(-s "$progress_total_bytes" -pterb)
+	fi
+
 # PROGRESS ANIMATION
-	log_start "backup - started"; move_line_up 2
-	anim_status_bar "Backup in progress...  "; sleep 0.3
+	hide_cursor
+	log_start "Backup in progress..."; move_line_up
 
 # MAKE BACKUP
-	tar "${tar_excludes[@]}" --transform='s|^\./||' -czf "$tar_file" -C "$backup_source" .
-
+	tar "${tar_excludes[@]}" --transform='s|^\./||' -cf - -C "$backup_source" . \
+		| pv "${progress_pv_args[@]}" \
+		| gzip > "$tar_file"
+		
 # GET FILE INFO
 	file_count=$(tar -tvzf "$tar_file" | awk '$1 ~ /^-/ { count++ } END { print count+0 }')
 	file_size=$(stat -c "%s" "$tar_file" | numfmt --to=iec)		# get size in bytes, convert to readable format
 	file_hidden=$(tar -tzf "$tar_file" | awk '!/\/$/ && /(^|\/)\.[^\/]+/ { count++ } END { print count+0 }')
+	show_cursor
 
 # SUCCESS TEXT
 	log_success "backup - success"

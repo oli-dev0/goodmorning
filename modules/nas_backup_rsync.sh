@@ -29,6 +29,7 @@
 #	- Uses rsync with archive mode (-a) and human-readable output (-h)				#
 #	- Uses --ignore-existing to prevent overwriting existing backups				#
 #	- Uses --stats to collect synchronization statistics							#
+#	- Polls NAS directory growth for a live overall transfer progress bar			#
 #	- Captures and formats rsync output for a clean summary							#
 #																					#
 #	Notes:																			#
@@ -75,25 +76,81 @@ log_start "nas rsync - start folder checks"; clearscreen
 	fi
 
 # START RSYNC BACKUP
-	log_start "nas rsync - backup started"; move_line_up 2
-	animation_spinner "Syncing backups to NAS... " 750
+	log_start "nas rsync - backup started"; move_line_up 2; echo
+
+	render_rsync_progress()
+	{
+		local percent="${1:-0}"
+		local width=30
+		local filled empty bar fill_space empty_space
+
+		(( percent < 0 )) && percent=0
+		(( percent > 100 )) && percent=100
+
+		filled=$(( percent * width / 100 ))
+		empty=$(( width - filled ))
+
+		printf -v fill_space '%*s' "$filled" ''
+		printf -v empty_space '%*s' "$empty" ''
+		bar="${fill_space// /#}${empty_space// /-}"
+
+		clearline
+		printf ' %sSyncing backups to NAS...%s [%s] %3d%%\r' "${INFO}" "${RESET}" "$bar" "$percent"
+	}
 
 	# putting output in a variable to format later
 	rsync_log="$(mktemp)" || { log_error "cannot create temporary rsync log"; exit 1; }
 	trap 'rm -f "$rsync_log"; cleanup' EXIT
 
-	if ! rsync -avh --ignore-existing --stats \
-	"$GM_LOCAL_BACKUP_DIR" \
-	"$GM_NAS_TARGET" \
-	> "$rsync_log"; then
+	hide_cursor
+
+	remote_path_quoted="$(printf '%q' "$GM_NAS_PATH")"
+	remote_start_kb="$(ssh "$GM_NAS_HOST" "du -sk $remote_path_quoted 2>/dev/null | awk '{ print \$1 }'")"
+	[[ "$remote_start_kb" =~ ^[0-9]+$ ]] || remote_start_kb=0
+
+	transfer_total_bytes="$(
+		rsync -an --ignore-existing --stats \
+			"$GM_LOCAL_BACKUP_DIR" \
+			"$GM_NAS_TARGET" |
+			awk -F': ' '
+				/^Total transferred file size:/ {
+					gsub(/[^0-9]/, "", $2)
+					print $2 + 0
+				}
+			'
+	)"
+
+	transfer_total_bytes="${transfer_total_bytes:-0}"
+	render_rsync_progress 0
+
+	rsync -avh --ignore-existing --stats \
+		"$GM_LOCAL_BACKUP_DIR" \
+		"$GM_NAS_TARGET" \
+		> "$rsync_log" 2>&1 &
+	rsync_pid=$!
+
+	while kill -0 "$rsync_pid" 2>/dev/null; do
+		if (( transfer_total_bytes > 0 )); then
+			remote_current_kb="$(ssh "$GM_NAS_HOST" "du -sk $remote_path_quoted 2>/dev/null | awk '{ print \$1 }'")"
+			[[ "$remote_current_kb" =~ ^[0-9]+$ ]] || { sleep 0.5; continue; }
+
+			transfer_done_bytes=$(( (remote_current_kb - remote_start_kb) * 1024 ))
+			transfer_percent=$(( transfer_done_bytes * 100 / transfer_total_bytes ))
+			render_rsync_progress "$transfer_percent"
+		fi
+		sleep 0.5
+	done
+
+	if ! wait "$rsync_pid"; then
 		log_error "rsync failed"
 		exit 1
 	fi
 
+	render_rsync_progress 100
+
 	rsync_output="$(< "$rsync_log")"
 
-	move_line_up
-	printf '\n '
+	clearline
 	log_success "Backup sync complete"
 
 # GET INFO
@@ -136,3 +193,4 @@ log_start "nas rsync - start folder checks"; clearscreen
 	printf '%11s📄 Transferred files:%s\n%s\n\n' "${INFO}" "${RESET}" "$transferred_files_list"
 
 	press_any_key
+	show_cursor
