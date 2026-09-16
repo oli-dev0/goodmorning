@@ -147,7 +147,7 @@ weather_fetch()
 
 # CHECK IF ONLINE
 	log_start "weather - starting fetch"; move_line_up 2
-	check_internet || exit 1
+	check_internet || return 1
 	clearscreen
 
 # FETCH ANIMATION
@@ -155,7 +155,12 @@ weather_fetch()
 
 # FETCH JSON
 	# real curl > show error if no http_get client installed
-	weather_json="$(http_get "${GM_WEATHER_API_URL}${location}${GM_WEATHER_FORMAT}")" || { log_error "weather - http_get"; move_line_up 2; exit 1; }
+	weather_json="$(http_get "${GM_WEATHER_API_URL}${location}${GM_WEATHER_FORMAT}")" || {
+		local http_status=$?
+		move_line_up 5; echo
+		log_error "weather - http_get failed (exit status: ${http_status})"
+		return 1
+	}
 	# weather_json=$(cat "$GM_LIBS_DIR/wttr.json")							# local file for testing
 	# format here: https://github.com/chubin/wttr.in#one-line-output
 
@@ -164,7 +169,7 @@ weather_fetch()
 	weather_verify_json "$weather_json" || { move_line_up; printf ' %sWeather fetch failed %s\n\n' "${ERROR}" "${RESET}"; return 1; }
 
 #  PARSE WEATHER VARIABLES FROM JSON
-	weather_parse_json "$weather_json" "$location"
+	weather_parse_json "$weather_json" "$location" || return 1
 }
 
 weather_warnings()
@@ -219,6 +224,7 @@ weather_loop()
 	
 	while $running; do
 		clearscreen
+		# A failed fetch is handled inside this loop so the parent launcher stays open.
 		weather_run "${1:-}" || true
 		set --										# clears all arguments from ./weather.sh "arg"
 													# so that new loop can ask for location

@@ -11,5 +11,3 @@ press_any_key
 
 
 clearscreen
-log_error "no active internet connection" >&2
-exit 1

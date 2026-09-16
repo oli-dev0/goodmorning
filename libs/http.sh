@@ -22,7 +22,7 @@ http_get_client()   # determines http get tool
 		http_client="fetch"
   else
 		log_error "no http_get tool installed - this script requires either curl, wget, httpie or fetch to be installed." >&2
-		exit 1
+		return 1
   fi
 }
 
@@ -36,7 +36,7 @@ http_get()			   # call the users configured client
 	fi
 	
   case "$http_client" in
-	curl)  curl -A curl -s --max-time 10 --connect-timeout 5 "$@" ;;
+	curl)  curl -A curl -sS --max-time 10 --connect-timeout 5 "$@" ;;
 	wget)  wget -qO- "$@" ;;
 	httpie) http --body --check-status GET "$@" ;;
 	fetch) fetch -q "$@" ;;

@@ -43,7 +43,7 @@
 # NAS BACKUP RSYNC
 	GM_NAS_HOST="nas"
 	GM_LOCAL_BACKUP_DIR="$GM_BACKUP_DEST/"						# what folder to sync with your NAS
-	GM_NAS_TARGET="$GM_NAS_HOST:/volume1/Data/Backups/Coding/"	# where to sync on your NAS
+	GM_NAS_TARGET="$GM_NAS_HOST:/volume2/Backups/Coding/"		# where to sync on your NAS
 	GM_NAS_PATH="${GM_NAS_TARGET#"$GM_NAS_HOST":}"				# need path for script
 
 # CRYPTO
