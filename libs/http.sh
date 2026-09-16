@@ -28,19 +28,58 @@ http_get_client()   # determines http get tool
 
 http_get()			   # call the users configured client
 {
-  # Get client if empty, else just use client
-  # You don't need to get client inside a script everytime
-  # just use http_get when needed
+	local -a headers=()
+	local -a request_args=()
+	local header
+
+	# Preserve the existing URL-only interface while allowing callers to send
+	# headers without exposing client-specific command details.
+	while (( $# > 0 )); do
+		case "$1" in
+			--header)
+				(( $# >= 2 )) || {
+					log_error "http_get - --header requires a value" >&2
+					return 2
+				}
+				headers+=("$2")
+				shift 2
+				;;
+			*)
+				request_args+=("$1")
+				shift
+				;;
+		esac
+	done
+
+	# Get client if empty, else just use client.
+	# The client is detected once and reused for later requests.
 	if [[ -z "${http_client:-}" ]]; then
 		http_get_client || return 1
 	fi
-	
-  case "$http_client" in
-	curl)  curl -A curl -sS --max-time 10 --connect-timeout 5 "$@" ;;
-	wget)  wget -qO- "$@" ;;
-	httpie) http --body --check-status GET "$@" ;;
-	fetch) fetch -q "$@" ;;
-  esac
+
+	case "$http_client" in
+		curl)
+			local -a curl_args=( -A curl -sS --max-time 10 --connect-timeout 5 )
+			for header in "${headers[@]}"; do curl_args+=( -H "$header" ); done
+			curl "${curl_args[@]}" "${request_args[@]}"
+			;;
+		wget)
+			local -a wget_args=( -qO- )
+			for header in "${headers[@]}"; do wget_args+=( "--header=$header" ); done
+			wget "${wget_args[@]}" "${request_args[@]}"
+			;;
+		httpie)
+			local -a httpie_args=( --body --check-status GET )
+			httpie_args+=( "${request_args[@]}" )
+			for header in "${headers[@]}"; do httpie_args+=( "$header" ); done
+			http "${httpie_args[@]}"
+			;;
+		fetch)
+			local -a fetch_args=( -q )
+			for header in "${headers[@]}"; do fetch_args+=( -H "$header" ); done
+			fetch "${fetch_args[@]}" "${request_args[@]}"
+			;;
+	esac
 }
 
 check_internet()

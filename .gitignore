@@ -4,6 +4,9 @@ libs/wttr.json
 modules/test.sh
 checks.sh
 
+# secrets
+secrets.sh
+
 # Editors
 .vscode/
 .idea/

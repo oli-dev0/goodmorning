@@ -5,6 +5,11 @@
 	GM_LIBS_DIR="$GM_ROOT_DIR/libs"
 	GM_MODULES_DIR="$GM_ROOT_DIR/modules"
 
+# LOAD SECRETS
+	if [[ -f "$GM_ROOT_DIR/secrets.sh" ]]; then
+		source "$GM_ROOT_DIR/secrets.sh"
+	fi
+
 # SET MESSAGES
 	# MAIN
 		# HELLO
@@ -26,7 +31,7 @@
 	# module name | display label | GUI description | shortcuts
 	GM_MODULES=(
 		"weather|🌤️  Weather|Check the weather for your current location or anywhere in the world 🌍|weather|w"
-		"crypto|🪙 Crypto (WIP)|Check current crypto prices and market movement 📈|crypto|cryp|c"
+		"crypto|🪙 Crypto|Check current crypto prices and market movement 📈|crypto|cryp|c"
 		"backup|💾 Backup|Create a local backup of your important files 🗂️|backup|back|bak|b"
 		"nas_backup_rsync|☁️  Sync backups to NAS|Sync your backup safely to the NAS over the network 🔁|rbak|rs|r"
 	)
@@ -48,9 +53,8 @@
 
 # CRYPTO
 	# API TO CALL
-		GM_CRYPTO_API=""				# currently empty because crypto script is WIP, not sure which API I will use
+		GM_CRYPTO_API="${coingecko_key:-}"
 	# SET BASE CURRENCY (EUR, AUD, USD etc)
-		GM_CRYPTO_BASE_CURRENCY="EUR"
+		GM_CRYPTO_BASE_CURRENCY="eur"
 	# SET FAVORITES
-		GM_CRYPTO_FAVORITES=("BTC" "ETH" "ADA" "SUI" "WPAY" "WXT" "ALPHA")
-
+		GM_CRYPTO_FAVORITES=("bitcoin" "cardano" "sui" "wpay" "wirex" "alpha-fi")
