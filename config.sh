@@ -42,8 +42,8 @@
 
 
 # LOCAL BACKUP - THESE FOLDERS MAY NOT BE THE SAME
-	GM_BACKUP_SOURCE="$HOME/Coding"				# what to backup
-	GM_BACKUP_DEST="$HOME/Coding/backups"		# where to backup (this folder is excluded from being backed up)
+	GM_BACKUP_SOURCE="/work/Coding"				# what to backup
+	GM_BACKUP_DEST="/work/Coding/backups"		# where to backup (this folder is excluded from being backed up)
 
 # NAS BACKUP RSYNC
 	GM_NAS_HOST="nas"
@@ -57,4 +57,4 @@
 	# SET BASE CURRENCY (EUR, AUD, USD etc)
 		GM_CRYPTO_BASE_CURRENCY="eur"
 	# SET FAVORITES
-		GM_CRYPTO_FAVORITES=("bitcoin" "cardano" "sui" "wpay" "wirex" "alpha-fi")
+		GM_CRYPTO_FAVORITES=("bitcoin" "cardano" "sui" "wpay" "wirex")
