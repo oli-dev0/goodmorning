@@ -79,7 +79,7 @@
 	animation_spinner "Checking available disk space... "
 
 	available_kb=$(df --output=avail "$backup_dest" | tail -n1)
-	source_kb=$(du -sk "$backup_source" | cut -f1)
+	source_kb=$(du -sk --exclude=".dart_tool" "$backup_source" | cut -f1)
 	required_kb=$(( source_kb * 120 / 100 ))
 
 	if (( available_kb < required_kb )); then
@@ -103,6 +103,8 @@
 	tar_excludes=(
 	--exclude="./tmp"
 	--exclude="./cache"
+	--exclude="*/frontend/build"
+	--exclude=".dart_tool"
 	)
 
 	# exclude backup folder from being backed up
@@ -120,6 +122,7 @@
 	exclude_paths=(
 		-path "$backup_source/tmp"
 		-o -path "$backup_source/cache"
+		-o -type d -name ".dart_tool"
 	)
 
 	if [[ "$backup_dest" == "$backup_source"/* ]]; then
