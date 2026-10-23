@@ -43,7 +43,7 @@
 
 # LOCAL BACKUP - THESE FOLDERS MAY NOT BE THE SAME
 	GM_BACKUP_SOURCE="/work/Coding"				# what to backup
-	GM_BACKUP_DEST="/work/Coding/backups"		# where to backup (this folder is excluded from being backed up)
+	GM_BACKUP_DEST="/work/backups"		# where to backup (this folder is excluded from being backed up)
 
 GM_BACKUP_KEEP=5					# maximum dated Coding archives, locally and on NAS
 
