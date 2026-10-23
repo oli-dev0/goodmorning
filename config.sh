@@ -45,6 +45,8 @@
 	GM_BACKUP_SOURCE="/work/Coding"				# what to backup
 	GM_BACKUP_DEST="/work/Coding/backups"		# where to backup (this folder is excluded from being backed up)
 
+GM_BACKUP_KEEP=5					# maximum dated Coding archives, locally and on NAS
+
 # NAS BACKUP RSYNC
 	GM_NAS_HOST="nas"
 	GM_LOCAL_BACKUP_DIR="$GM_BACKUP_DEST/"						# what folder to sync with your NAS

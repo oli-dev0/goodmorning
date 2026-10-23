@@ -6,7 +6,7 @@
 #	---------------																	#
 #	Purpose:																		#
 #	- Synchronizes local backup archives to a NAS using rsync over SSH				#
-#	- Transfers only files that do not already exist on the NAS					 	#
+#	- Transfers files only when their contents differ					 	#
 # 																					#
 #	Usage:																			#
 #	./nas_backup_rsync.sh															#
@@ -27,13 +27,13 @@
 #																					#
 #	Synchronization:																#
 #	- Uses rsync with archive mode (-a) and human-readable output (-h)				#
-#	- Uses --ignore-existing to prevent overwriting existing backups				#
+#	- Uses --checksum to overwrite existing files only when their contents differ				#
 #	- Uses --stats to collect synchronization statistics							#
 #	- Polls NAS directory growth for a live overall transfer progress bar			#
 #	- Captures and formats rsync output for a clean summary							#
 #																					#
 #	Notes:																			#
-#	- Existing backup archives on the NAS are preserved								#
+#	- Keeps the newest configured number of dated backup archives								#
 #	- Temporary rsync logs are removed after execution								#
 #	- Intended as the second stage of the backup workflow:							#
 #		Local Backup  ->  NAS Synchronization										#
@@ -109,7 +109,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 	[[ "$remote_start_kb" =~ ^[0-9]+$ ]] || remote_start_kb=0
 
 	transfer_total_bytes="$(
-		rsync -an --ignore-existing --stats \
+		rsync -acn --stats --exclude='/.coding-backup.*' \
 			"$GM_LOCAL_BACKUP_DIR" \
 			"$GM_NAS_TARGET" |
 			awk -F': ' '
@@ -123,7 +123,7 @@ log_start "nas rsync - start folder checks"; clearscreen
 	transfer_total_bytes="${transfer_total_bytes:-0}"
 	render_rsync_progress 0
 
-	rsync -avh --ignore-existing --stats \
+	rsync -avhc --stats --exclude='/.coding-backup.*' \
 		"$GM_LOCAL_BACKUP_DIR" \
 		"$GM_NAS_TARGET" \
 		> "$rsync_log" 2>&1 &
@@ -143,6 +143,14 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 	if ! wait "$rsync_pid"; then
 		log_error "rsync failed"
+		exit 1
+	fi
+
+	# Apply the same retention independently on the NAS, only after a successful upload.
+	# Quote arguments for the remote shell; the retention script is sent over stdin.
+	printf -v retention_command 'bash -s -- %q %q' "$GM_NAS_PATH" "$GM_BACKUP_KEEP"
+	if ! ssh -o BatchMode=yes "$GM_NAS_HOST" "$retention_command" < "$SCRIPT_DIR/../libs/backup_retention.sh"; then
+		log_error "NAS upload succeeded, but backup retention failed"
 		exit 1
 	fi
 

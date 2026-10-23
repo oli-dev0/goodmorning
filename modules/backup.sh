@@ -75,11 +75,28 @@
 		log_success "All folders valid"; move_line_up
 	fi
 
+# EXCLUSIONS
+	# fixed excludes, can be added with +=
+	tar_excludes=(
+	--exclude="./tmp"
+	--exclude="./cache"
+	--exclude="./loop-logs"
+	--exclude="*/frontend/build"
+	--exclude=".dart_tool"
+	)
+
+	# exclude backup folder from being backed up
+	if [[ "$backup_dest" == "$backup_source"/* ]]; then				# if backup dest is inside source
+		backup_relative_path="${backup_dest#"$backup_source"/}"		# then get relative path (this is needed because tar -C)
+		tar_excludes+=(--exclude="./$backup_relative_path")			# add exclusion to array
+	fi
+
 # CHECK IF ENOUGH DISK SPACE IS AVAILABLE
 	animation_spinner "Checking available disk space... "
 
 	available_kb=$(df --output=avail "$backup_dest" | tail -n1)
-	source_kb=$(du -sk --exclude=".dart_tool" "$backup_source" | cut -f1)
+	# Use the same relative paths and exclusions as tar.
+	source_kb=$(cd -- "$backup_source" && du -sk "${tar_excludes[@]}" . | cut -f1)
 	required_kb=$(( source_kb * 120 / 100 ))
 
 	if (( available_kb < required_kb )); then
@@ -92,36 +109,28 @@
 		log_success "Enough disk space available";
 	fi
 
+# REFRESH THE TWO FIXED BACKUPS BEFORE CREATING THE CODING ARCHIVE
+	echo
+	bash /work/Coding/bash/scripts/backup-omp.sh
+	echo
+	bash /work/Coding/bash/scripts/backup-bashrc.sh
+	echo
+
 # VARIABLES
-	timestamp="$(date '+%Y-%m-%d_%H-%M')"
+	timestamp="$(date '+%Y-%m-%d_%H-%M-%S')"
 	readonly timestamp
 	tar_file="$backup_dest/$timestamp.tar.gz"
 	readonly tar_file
-
-# EXCLUSIONS
-	# fixed excludes, can be added with +=
-	tar_excludes=(
-	--exclude="./tmp"
-	--exclude="./cache"
-	--exclude="*/frontend/build"
-	--exclude=".dart_tool"
-	)
-
-	# exclude backup folder from being backed up
-	if [[ "$backup_dest" == "$backup_source"/* ]]; then				# if backup dest is inside source
-		backup_relative_path="${backup_dest#"$backup_source"/}"		# then get relative path (this is needed because tar -C)
-		tar_excludes+=(--exclude="./$backup_relative_path")			# add exclusion to array
-	fi
-	
-	# exclude current archive if created inside source (edge case)
-	if [[ "$tar_file" == "$backup_source"/* ]]; then				# if created tar sits inside source
-		tar_excludes+=(--exclude="./${tar_file#"$backup_source"/}")	# exclude it
-	fi
+	[[ ! -e "$tar_file" ]] || { log_error "backup archive already exists: $tar_file"; exit 1; }
+	temp_archive="$(mktemp "$backup_dest/.coding-backup.XXXXXX")"
+	trap 'rm -f -- "$temp_archive"; cleanup' EXIT
 
 # PROGRESS SIZE
 	exclude_paths=(
 		-path "$backup_source/tmp"
 		-o -path "$backup_source/cache"
+		-o -path "$backup_source/loop-logs"
+		-o -path "$backup_source/*/frontend/build"
 		-o -type d -name ".dart_tool"
 	)
 
@@ -150,13 +159,17 @@
 # MAKE BACKUP
 	tar "${tar_excludes[@]}" --transform='s|^\./||' -cf - -C "$backup_source" . \
 		| pv "${progress_pv_args[@]}" \
-		| gzip > "$tar_file"
+		| gzip > "$temp_archive"
+	mv -- "$temp_archive" "$tar_file"
 		
 # GET FILE INFO
 	file_count=$(tar -tvzf "$tar_file" | awk '$1 ~ /^-/ { count++ } END { print count+0 }')
 	file_size=$(stat -c "%s" "$tar_file" | numfmt --to=iec)		# get size in bytes, convert to readable format
 	file_hidden=$(tar -tzf "$tar_file" | awk '!/\/$/ && /(^|\/)\.[^\/]+/ { count++ } END { print count+0 }')
 	show_cursor
+
+# RETENTION: ONLY REMOVE OLD DATED ARCHIVES AFTER SUCCESS
+	bash "$SCRIPT_DIR/../libs/backup_retention.sh" "$backup_dest" "$GM_BACKUP_KEEP"
 
 # SUCCESS TEXT
 	log_success "backup - success"
