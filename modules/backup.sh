@@ -110,11 +110,13 @@
 		log_success "Enough disk space available";
 	fi
 
-# REFRESH THE TWO FIXED BACKUPS BEFORE CREATING THE CODING ARCHIVE
+# REFRESH THE FIXED BACKUPS BEFORE CREATING THE CODING ARCHIVE
 	echo
 	bash /work/Coding/bash/scripts/backup-omp.sh
 	echo
 	bash /work/Coding/bash/scripts/backup-bashrc.sh
+	echo
+	bash /work/Coding/bash/scripts/backup-obsidian.sh
 	echo
 
 # VARIABLES
