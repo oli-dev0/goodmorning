@@ -46,6 +46,8 @@
 	GM_BACKUP_DEST="/work/backups"		# where to backup (this folder is excluded from being backed up)
 
 GM_BACKUP_KEEP=5					# maximum dated Coding archives, locally and on NAS
+GM_HELPER_BACKUPS=(omp bashrc obsidian)	# dated helper archives <name>_<timestamp>.tar.gz
+GM_HELPER_BACKUP_KEEP=3				# maximum dated archives per helper, locally and on NAS
 
 # NAS BACKUP RSYNC
 	GM_NAS_HOST="nas"

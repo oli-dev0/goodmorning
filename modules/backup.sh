@@ -118,6 +118,9 @@
 	echo
 	bash /work/Coding/bash/scripts/backup-obsidian.sh
 	echo
+	for helper in "${GM_HELPER_BACKUPS[@]}"; do
+		bash "$SCRIPT_DIR/../libs/backup_retention.sh" "$backup_dest" "$GM_HELPER_BACKUP_KEEP" "$helper"
+	done
 
 # VARIABLES
 	timestamp="$(date '+%Y-%m-%d_%H-%M-%S')"

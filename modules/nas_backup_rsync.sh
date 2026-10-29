@@ -153,6 +153,13 @@ log_start "nas rsync - start folder checks"; clearscreen
 		log_error "NAS upload succeeded, but backup retention failed"
 		exit 1
 	fi
+	for helper in "${GM_HELPER_BACKUPS[@]}"; do
+		printf -v retention_command 'bash -s -- %q %q %q' "$GM_NAS_PATH" "$GM_HELPER_BACKUP_KEEP" "$helper"
+		if ! ssh -o BatchMode=yes "$GM_NAS_HOST" "$retention_command" < "$SCRIPT_DIR/../libs/backup_retention.sh"; then
+			log_error "NAS upload succeeded, but $helper backup retention failed"
+			exit 1
+		fi
+	done
 
 	render_rsync_progress 100
 
