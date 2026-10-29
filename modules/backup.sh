@@ -80,7 +80,7 @@
 	tar_excludes=(
 	--exclude="./tmp"
 	--exclude="./cache"
-	--exclude="./loop-logs"
+	--exclude="./projects/looper/logs"
 	--exclude="./IDEs"
 	--exclude="*/frontend/build"
 	--exclude=".dart_tool"
@@ -130,7 +130,7 @@
 	exclude_paths=(
 		-path "$backup_source/tmp"
 		-o -path "$backup_source/cache"
-		-o -path "$backup_source/loop-logs"
+		-o -path "$backup_source/projects/looper/logs"
 		-o -path "$backup_source/IDEs"
 		-o -path "$backup_source/*/frontend/build"
 		-o -type d -name ".dart_tool"
