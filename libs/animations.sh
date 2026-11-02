@@ -59,6 +59,38 @@
 	flushread
 	}
 
+# SPINNER WHILE COMMAND RUNS - usage: run_with_spinner "TEXT" "OUTPUT_FILE" command [args...]
+# Saves the command's stdout to OUTPUT_FILE. Exit status is ignored; callers check the output.
+	run_with_spinner()
+	{
+		local msg="$1"
+		local out="$2"
+		shift 2
+
+		local spin='|/—\'
+		local i=0
+
+		hide_keyboard
+		hide_cursor
+		printf "%s" "${WARNING}"
+
+		"$@" > "$out" 2>/dev/null &
+		local pid=$!
+
+		while kill -0 "$pid" 2>/dev/null; do
+			printf "\r %s %s   " "$msg" "${spin:i%4:1}"
+			i=$(( (i + 1) % 4 ))
+			sleep 0.1
+		done
+		wait "$pid" || true
+
+		printf "%s" "${RESET}"
+		show_keyboard
+		show_cursor
+		echo
+		flushread
+	}
+
 # TEXT REVEAL - usage: animation_reveal "TEXT" 0.05 "${COLOR}"
 	animation_reveal() 
 	{

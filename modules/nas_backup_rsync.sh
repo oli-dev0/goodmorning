@@ -6,7 +6,7 @@
 #	---------------																	#
 #	Purpose:																		#
 #	- Synchronizes local backup archives to a NAS using rsync over SSH				#
-#	- Transfers files only when their contents differ					 	#
+#	- Transfers files only when their contents differ					 			#
 # 																					#
 #	Usage:																			#
 #	./nas_backup_rsync.sh															#
@@ -27,13 +27,13 @@
 #																					#
 #	Synchronization:																#
 #	- Uses rsync with archive mode (-a) and human-readable output (-h)				#
-#	- Uses --checksum to overwrite existing files only when their contents differ				#
+#	- Uses --checksum to overwrite existing files only when their contents differ	#
 #	- Uses --stats to collect synchronization statistics							#
 #	- Polls NAS directory growth for a live overall transfer progress bar			#
 #	- Captures and formats rsync output for a clean summary							#
 #																					#
 #	Notes:																			#
-#	- Keeps the newest configured number of dated backup archives								#
+#	- Keeps the newest configured number of dated backup archives					#
 #	- Temporary rsync logs are removed after execution								#
 #	- Intended as the second stage of the backup workflow:							#
 #		Local Backup  ->  NAS Synchronization										#
@@ -100,24 +100,31 @@ log_start "nas rsync - start folder checks"; clearscreen
 
 	# putting output in a variable to format later
 	rsync_log="$(mktemp)" || { log_error "cannot create temporary rsync log"; exit 1; }
-	trap 'rm -f "$rsync_log"; cleanup' EXIT
+	size_out="$(mktemp)" || { log_error "cannot create temporary size log"; exit 1; }
+	trial_log="$(mktemp)" || { log_error "cannot create temporary comparison log"; exit 1; }
+	trap 'rm -f "$rsync_log" "$size_out" "$trial_log"; cleanup' EXIT
 
 	hide_cursor
 
 	remote_path_quoted="$(printf '%q' "$GM_NAS_PATH")"
-	remote_start_kb="$(ssh "$GM_NAS_HOST" "du -sk $remote_path_quoted 2>/dev/null | awk '{ print \$1 }'")"
+	run_with_spinner "Checking NAS storage size... " "$size_out" \
+		ssh "$GM_NAS_HOST" "du -sk $remote_path_quoted 2>/dev/null | awk '{ print \$1 }'"
+	move_line_up 2
+	log_success "NAS storage size checked"
+	remote_start_kb="$(< "$size_out")"
 	[[ "$remote_start_kb" =~ ^[0-9]+$ ]] || remote_start_kb=0
 
+	run_with_spinner "Comparing files with NAS... " "$trial_log" \
+		rsync -acn --stats --exclude='/.coding-backup.*' "$GM_LOCAL_BACKUP_DIR" "$GM_NAS_TARGET"
+	move_line_up 2
+	log_success "File comparison complete"
 	transfer_total_bytes="$(
-		rsync -acn --stats --exclude='/.coding-backup.*' \
-			"$GM_LOCAL_BACKUP_DIR" \
-			"$GM_NAS_TARGET" |
-			awk -F': ' '
-				/^Total transferred file size:/ {
-					gsub(/[^0-9]/, "", $2)
-					print $2 + 0
-				}
-			'
+		awk -F': ' '
+			/^Total transferred file size:/ {
+				gsub(/[^0-9]/, "", $2)
+				print $2 + 0
+			}
+		' "$trial_log"
 	)"
 
 	transfer_total_bytes="${transfer_total_bytes:-0}"
